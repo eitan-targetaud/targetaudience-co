@@ -131,28 +131,102 @@
     overflow:hidden;
   }
 
-  /* progress: ring of soft dots that fill like glowing points, matches "glow" motif */
+  /* progress: numbered step track with a connecting line, inspired by
+     step-by-step quiz flows - line fills in as each question is answered */
   .progress{
     display:flex;
     align-items:center;
-    justify-content:center;
-    gap:8px;
-    margin-bottom:26px;
+    margin-bottom:30px;
   }
-  .dot{
-    width:9px;height:9px;
+  .p-node{
+    width:26px;height:26px;
     border-radius:50%;
-    background: var(--line);
-    transition: all .45s cubic-bezier(.4,0,.2,1);
+    border:2px solid var(--line);
+    background:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:11px;
+    font-weight:700;
+    color:var(--ink-soft);
+    flex-shrink:0;
+    transition: all .35s cubic-bezier(.4,0,.2,1);
   }
-  .dot.active{
-    width:26px;
-    background: linear-gradient(90deg, var(--rose), var(--rose-deep));
+  .p-node.start{ width:13px;height:13px; }
+  .p-node.active{
+    border-color:var(--rose-deep);
+    color:var(--rose-deep);
     box-shadow: 0 0 0 4px rgba(231,162,172,0.25);
   }
-  .dot.done{
-    background: var(--rose-soft);
+  .p-node.done{
+    background: var(--rose-deep);
+    border-color:var(--rose-deep);
+    color:#fff;
   }
+  .p-line{
+    flex:1;
+    height:2px;
+    background:var(--line);
+    margin:0 4px;
+    transition: background .35s ease;
+  }
+  .p-line.filled{ background:var(--rose-deep); }
+
+  /* two-part option copy: bold keyword + light description, one line */
+  .opt-text b{ font-weight:700; }
+  .opt-sub{ color:var(--ink-soft); font-weight:400; }
+
+  /* horizontal scale control (single-select on a spectrum, e.g. urgency) */
+  .options.scale-row{
+    flex-direction:row;
+    justify-content:space-between;
+    align-items:flex-start;
+    position:relative;
+    padding:8px 2px 2px;
+    margin-bottom:22px;
+  }
+  .options.scale-row::before{
+    content:"";
+    position:absolute;
+    top:19px;
+    right:26px;
+    left:26px;
+    height:2px;
+    background:var(--line);
+    z-index:0;
+  }
+  .scale-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:9px;
+    cursor:pointer;
+    position:relative;
+    z-index:1;
+    flex:1;
+    padding:0 4px;
+  }
+  .scale-node{
+    width:22px;height:22px;
+    border-radius:50%;
+    border:2px solid var(--line);
+    background:var(--card);
+    transition: all .2s ease;
+  }
+  .scale-item:hover .scale-node{ border-color:var(--rose-soft); }
+  .scale-item.selected .scale-node{
+    background: var(--rose-deep);
+    border-color: var(--rose-deep);
+    box-shadow: 0 0 0 4px rgba(231,162,172,0.25);
+  }
+  .scale-label{
+    font-size:12.5px;
+    color:var(--ink-soft);
+    text-align:center;
+    line-height:1.3;
+    max-width:92px;
+  }
+  .scale-item.selected .scale-label{ color:var(--ink); font-weight:600; }
 
   .step{
     display:none;
@@ -529,15 +603,15 @@ const GAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbw2vkrZnXo4X536gkn
 
 /* ====== Question data ====== */
 const Q1_OPTIONS = [
-  "הזרקות ומילויים (בוטוקס, חומצה היאלורונית ועוד)",
-  "חידוש והצערת עור (אנטי אייג'ינג, שיפור מרקם ואיכות העור)",
-  "עיצוב וחיטוב גוף ללא ניתוח",
-  "פיסול ועיצוב פנים",
-  "לא בטוח/ה - רוצה המלצה מקצועית"
+  { label:"הזרקות ומילויים", sub:"בוטוקס, חומצה היאלורונית ועוד", value:"הזרקות ומילויים (בוטוקס, חומצה היאלורונית ועוד)" },
+  { label:"חידוש והצערת עור", sub:"אנטי אייג'ינג, שיפור מרקם ואיכות העור", value:"חידוש והצערת עור (אנטי אייג'ינג, שיפור מרקם ואיכות העור)" },
+  { label:"עיצוב וחיטוב גוף", sub:"ללא ניתוח", value:"עיצוב וחיטוב גוף ללא ניתוח" },
+  { label:"פיסול ועיצוב פנים", sub:"", value:"פיסול ועיצוב פנים" },
+  { label:"לא בטוח/ה", sub:"רוצה המלצה מקצועית", value:"לא בטוח/ה - רוצה המלצה מקצועית" }
 ];
 const Q2_OPTIONS = [
-  "כן, ואני מחפש/ת להמשיך או לחזור",
-  "לא, זו הפעם הראשונה שלי"
+  { label:"כן", sub:"ואני מחפש/ת להמשיך או לחזור", value:"כן, ואני מחפש/ת להמשיך או לחזור" },
+  { label:"לא", sub:"זו הפעם הראשונה שלי", value:"לא, זו הפעם הראשונה שלי" }
 ];
 const Q3_OPTIONS = [
   "השבוע-השבועיים הקרובים",
@@ -545,13 +619,13 @@ const Q3_OPTIONS = [
   "בודק/ת אפשרויות לעתיד"
 ];
 const Q4_OPTIONS = [
-  "תל אביב והמרכז (גוש דן)",
-  "ירושלים והסביבה",
-  "חיפה והקריות",
-  "השרון (רעננה, הרצליה, כפר סבא, נתניה)",
-  "ראשון לציון, אשדוד והשפלה",
-  "באר שבע והדרום",
-  "הצפון (עכו, נהריה, טבריה)"
+  { label:"תל אביב והמרכז", sub:"גוש דן", value:"תל אביב והמרכז (גוש דן)" },
+  { label:"ירושלים והסביבה", sub:"", value:"ירושלים והסביבה" },
+  { label:"חיפה והקריות", sub:"", value:"חיפה והקריות" },
+  { label:"השרון", sub:"רעננה, הרצליה, כפר סבא, נתניה", value:"השרון (רעננה, הרצליה, כפר סבא, נתניה)" },
+  { label:"ראשון לציון, אשדוד והשפלה", sub:"", value:"ראשון לציון, אשדוד והשפלה" },
+  { label:"באר שבע והדרום", sub:"", value:"באר שבע והדרום" },
+  { label:"הצפון", sub:"עכו, נהריה, טבריה", value:"הצפון (עכו, נהריה, טבריה)" }
 ];
 
 const STEPS = ["intro","q1","q2","q3","q4","contact","done"];
@@ -563,23 +637,29 @@ const checkSvg = `<svg viewBox="0 0 12 12" fill="none"><path d="M2 6.2L4.6 9L10 
 function buildOptions(containerId, list, multi, answerKey){
   const el = document.getElementById(containerId);
   el.innerHTML = "";
-  list.forEach((text) => {
+  list.forEach((item) => {
+    const label = typeof item === "string" ? item : item.label;
+    const sub = typeof item === "string" ? "" : (item.sub || "");
+    const value = typeof item === "string" ? item : (item.value || item.label);
     const opt = document.createElement("div");
     opt.className = "opt " + (multi ? "multi" : "single");
-    opt.innerHTML = `<span class="opt-mark">${checkSvg}</span><span>${text}</span>`;
+    const textHtml = sub
+      ? `<b>${label}</b> <span class="opt-sub">${sub}</span>`
+      : `${label}`;
+    opt.innerHTML = `<span class="opt-mark">${checkSvg}</span><span class="opt-text">${textHtml}</span>`;
     opt.addEventListener("click", () => {
       if(multi){
-        const idx = answers[answerKey].indexOf(text);
+        const idx = answers[answerKey].indexOf(value);
         if(idx > -1){
           answers[answerKey].splice(idx,1);
           opt.classList.remove("selected");
         } else {
-          answers[answerKey].push(text);
+          answers[answerKey].push(value);
           opt.classList.add("selected");
         }
         document.getElementById("next-"+answerKey).disabled = answers[answerKey].length === 0;
       } else {
-        answers[answerKey] = text;
+        answers[answerKey] = value;
         [...el.children].forEach(c => c.classList.remove("selected"));
         opt.classList.add("selected");
         document.getElementById("next-"+answerKey).disabled = false;
@@ -589,9 +669,28 @@ function buildOptions(containerId, list, multi, answerKey){
   });
 }
 
+/* horizontal scale control, single-select spectrum (e.g. urgency) */
+function buildScale(containerId, list, answerKey){
+  const el = document.getElementById(containerId);
+  el.innerHTML = "";
+  el.classList.add("scale-row");
+  list.forEach((text) => {
+    const item = document.createElement("div");
+    item.className = "scale-item";
+    item.innerHTML = `<span class="scale-node"></span><span class="scale-label">${text}</span>`;
+    item.addEventListener("click", () => {
+      answers[answerKey] = text;
+      [...el.querySelectorAll(".scale-item")].forEach(c => c.classList.remove("selected"));
+      item.classList.add("selected");
+      document.getElementById("next-"+answerKey).disabled = false;
+    });
+    el.appendChild(item);
+  });
+}
+
 buildOptions("opts-q1", Q1_OPTIONS, true, "q1");
 buildOptions("opts-q2", Q2_OPTIONS, false, "q2");
-buildOptions("opts-q3", Q3_OPTIONS, false, "q3");
+buildScale("opts-q3", Q3_OPTIONS, "q3");
 buildOptions("opts-q4", Q4_OPTIONS, false, "q4");
 
 function renderProgress(){
@@ -602,13 +701,24 @@ function renderProgress(){
     return;
   }
   progEl.style.display = "flex";
-  const questionSteps = ["q1","q2","q3","q4","contact"];
-  const activeIdx = questionSteps.indexOf(step);
+  const questionSteps = ["q1","q2","q3","q4"];
+  const activeIdx = questionSteps.indexOf(step); // -1 once we reach "contact" (all questions done)
   progEl.innerHTML = "";
+
+  const startNode = document.createElement("span");
+  startNode.className = "p-node start done";
+  progEl.appendChild(startNode);
+
   questionSteps.forEach((s, i) => {
-    const dot = document.createElement("span");
-    dot.className = "dot" + (i === activeIdx ? " active" : (i < activeIdx ? " done" : ""));
-    progEl.appendChild(dot);
+    const passed = activeIdx === -1 || i < activeIdx;
+    const line = document.createElement("span");
+    line.className = "p-line" + (passed ? " filled" : "");
+    progEl.appendChild(line);
+
+    const node = document.createElement("span");
+    node.className = "p-node" + (passed ? " done" : (i === activeIdx ? " active" : ""));
+    node.textContent = passed ? "✓" : String(i + 1);
+    progEl.appendChild(node);
   });
 }
 
