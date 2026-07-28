@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>מצאי את הטיפול האסתטי המתאים לך</title>
+<meta name="description" content="שאלון קצר של דקה - קבלי המלצת טיפול אסתטי מותאמת אישית והצעת מחיר.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700;900&family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #FBF3F0;
+    --card: #FFFDFC;
+    --rose: #E7A2AC;
+    --rose-soft: #F3C7CE;
+    --rose-deep: #B85C6B;
+    --rose-deeper: #8F3F4E;
+    --peach: #F4DCC6;
+    --lavender: #E7DCEC;
+    --ink: #3B2A2E;
+    --ink-soft: #7A6265;
+    --line: #EFDCD9;
+    --shadow: 0 20px 50px -20px rgba(184,92,107,0.35);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+
+  body{
+    font-family:'Heebo', sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3,.serif{
+    font-family:'Frank Ruhl Libre', serif;
+  }
+
+  /* ambient glow blobs - the signature element: soft drifting light like skin luminosity */
+  .blob{
+    position:fixed;
+    border-radius:50%;
+    filter: blur(60px);
+    opacity:0.55;
+    z-index:0;
+    pointer-events:none;
+  }
+  .blob-1{
+    width:420px;height:420px;
+    background: radial-gradient(circle at 30% 30%, var(--rose-soft), transparent 70%);
+    top:-120px; right:-140px;
+    animation: drift1 18s ease-in-out infinite;
+  }
+  .blob-2{
+    width:380px;height:380px;
+    background: radial-gradient(circle at 60% 40%, var(--peach), transparent 70%);
+    bottom:-160px; left:-120px;
+    animation: drift2 22s ease-in-out infinite;
+  }
+  .blob-3{
+    width:300px;height:300px;
+    background: radial-gradient(circle at 50% 50%, var(--lavender), transparent 70%);
+    top:40%; left:50%;
+    animation: drift3 26s ease-in-out infinite;
+    opacity:0.35;
+  }
+  @keyframes drift1{
+    0%,100%{ transform: translate(0,0) scale(1); }
+    50%{ transform: translate(-30px, 40px) scale(1.08); }
+  }
+  @keyframes drift2{
+    0%,100%{ transform: translate(0,0) scale(1); }
+    50%{ transform: translate(40px,-30px) scale(1.1); }
+  }
+  @keyframes drift3{
+    0%,100%{ transform: translate(-50%,-50%) scale(1); }
+    50%{ transform: translate(-45%,-55%) scale(1.15); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .blob{animation:none !important;}
+  }
+
+  .wrap{
+    position:relative;
+    z-index:1;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:28px 16px;
+  }
+
+  .stage{
+    width:100%;
+    max-width:560px;
+  }
+
+  .brand{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:22px;
+    color:var(--rose-deeper);
+    letter-spacing:0.5px;
+  }
+  .brand-mark{
+    width:34px;height:34px;
+    border-radius:50%;
+    background: conic-gradient(from 180deg, var(--rose), var(--peach), var(--lavender), var(--rose));
+    flex-shrink:0;
+  }
+  .brand-name{
+    font-family:'Frank Ruhl Libre', serif;
+    font-size:19px;
+    font-weight:700;
+  }
+
+  .card{
+    background:var(--card);
+    border-radius:28px;
+    box-shadow:var(--shadow);
+    border:1px solid var(--line);
+    padding:38px 32px 32px;
+    position:relative;
+    overflow:hidden;
+  }
+
+  /* progress: ring of soft dots that fill like glowing points, matches "glow" motif */
+  .progress{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    margin-bottom:26px;
+  }
+  .dot{
+    width:9px;height:9px;
+    border-radius:50%;
+    background: var(--line);
+    transition: all .45s cubic-bezier(.4,0,.2,1);
+  }
+  .dot.active{
+    width:26px;
+    background: linear-gradient(90deg, var(--rose), var(--rose-deep));
+    box-shadow: 0 0 0 4px rgba(231,162,172,0.25);
+  }
+  .dot.done{
+    background: var(--rose-soft);
+  }
+
+  .step{
+    display:none;
+    animation: fadeUp .5s cubic-bezier(.16,1,.3,1);
+  }
+  .step.visible{ display:block; }
+
+  @keyframes fadeUp{
+    from{ opacity:0; transform: translateY(14px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+
+  .eyebrow{
+    font-size:13px;
+    color:var(--rose-deep);
+    font-weight:600;
+    margin:0 0 6px;
+    letter-spacing:0.3px;
+  }
+
+  .q-title{
+    font-size:26px;
+    line-height:1.35;
+    margin:0 0 8px;
+    color:var(--ink);
+    font-weight:700;
+  }
+  .q-sub{
+    font-size:15px;
+    color:var(--ink-soft);
+    margin:0 0 26px;
+    line-height:1.5;
+  }
+
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-bottom:8px;
+  }
+
+  .opt{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:16px 18px;
+    border-radius:16px;
+    border:1.5px solid var(--line);
+    background:#fff;
+    cursor:pointer;
+    transition: all .2s ease;
+    text-align:right;
+    font-family:'Heebo', sans-serif;
+    font-size:16px;
+    color:var(--ink);
+    font-weight:500;
+  }
+  .opt:hover{
+    border-color:var(--rose-soft);
+    transform: translateY(-1px);
+  }
+  .opt.selected{
+    border-color:var(--rose-deep);
+    background: linear-gradient(0deg, rgba(231,162,172,0.10), rgba(231,162,172,0.10));
+    box-shadow: 0 6px 18px -8px rgba(184,92,107,0.4);
+  }
+  .opt-mark{
+    width:22px;height:22px;
+    border-radius:7px;
+    border:1.5px solid #DDC9C7;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#fff;
+    transition: all .2s ease;
+  }
+  .opt.single .opt-mark{ border-radius:50%; }
+  .opt.selected .opt-mark{
+    background: var(--rose-deep);
+    border-color: var(--rose-deep);
+  }
+  .opt-mark svg{
+    width:13px;height:13px;
+    opacity:0;
+    transition: opacity .15s ease;
+  }
+  .opt.selected .opt-mark svg{ opacity:1; }
+
+  .hint{
+    font-size:13px;
+    color:var(--ink-soft);
+    margin: 4px 2px 18px;
+  }
+
+  .field{
+    margin-bottom:16px;
+  }
+  .field label{
+    display:block;
+    font-size:14px;
+    font-weight:600;
+    color:var(--ink);
+    margin-bottom:8px;
+  }
+  .field input{
+    width:100%;
+    padding:15px 16px;
+    border-radius:14px;
+    border:1.5px solid var(--line);
+    font-family:'Heebo', sans-serif;
+    font-size:16px;
+    background:#fff;
+    color:var(--ink);
+    transition: border-color .2s ease;
+  }
+  .field input:focus{
+    outline:none;
+    border-color:var(--rose-deep);
+  }
+  .field input.error{
+    border-color:#C15454;
+  }
+  .error-msg{
+    font-size:12.5px;
+    color:#C15454;
+    margin-top:6px;
+    display:none;
+  }
+  .field.has-error .error-msg{ display:block; }
+
+  .nav-row{
+    display:flex;
+    gap:12px;
+    margin-top:22px;
+  }
+
+  .btn{
+    flex:1;
+    padding:16px 20px;
+    border-radius:14px;
+    border:none;
+    font-family:'Heebo', sans-serif;
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
+    transition: all .2s ease;
+  }
+  .btn-primary{
+    background: linear-gradient(120deg, var(--rose-deep), var(--rose-deeper));
+    color:#fff;
+    box-shadow: 0 12px 24px -10px rgba(143,63,78,0.55);
+  }
+  .btn-primary:hover{ transform: translateY(-1px); box-shadow: 0 16px 28px -10px rgba(143,63,78,0.6); }
+  .btn-primary:disabled{
+    background:#E9D9D6;
+    color:#B7A5A2;
+    box-shadow:none;
+    cursor:not-allowed;
+    transform:none;
+  }
+  .btn-ghost{
+    flex:0 0 auto;
+    background:transparent;
+    color:var(--ink-soft);
+    border:1.5px solid var(--line);
+    padding:16px 20px;
+  }
+  .btn-ghost:hover{ border-color:var(--rose-soft); color:var(--ink); }
+
+  /* Intro screen */
+  .intro-art{
+    width:100%;
+    height:150px;
+    border-radius:20px;
+    margin-bottom:22px;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(231,162,172,0.55), transparent 55%),
+      radial-gradient(circle at 80% 40%, rgba(244,220,198,0.6), transparent 55%),
+      radial-gradient(circle at 50% 80%, rgba(231,220,236,0.5), transparent 55%),
+      linear-gradient(160deg, #fff, #FEF7F4);
+    position:relative;
+    overflow:hidden;
+    border:1px solid var(--line);
+  }
+  .intro-title{
+    font-size:30px;
+    line-height:1.3;
+    margin:0 0 10px;
+    font-weight:700;
+  }
+  .intro-sub{
+    font-size:16px;
+    color:var(--ink-soft);
+    line-height:1.6;
+    margin:0 0 26px;
+  }
+  .intro-points{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-bottom:26px;
+  }
+  .intro-point{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:14.5px;
+    color:var(--ink);
+  }
+  .intro-point .ic{
+    width:26px;height:26px;
+    border-radius:50%;
+    background: var(--rose-soft);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+    font-size:13px;
+  }
+
+  /* thank you */
+  .done-wrap{ text-align:center; padding:10px 0 6px; }
+  .done-icon{
+    width:76px;height:76px;
+    border-radius:50%;
+    background: linear-gradient(135deg, var(--rose-soft), var(--peach));
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 22px;
+  }
+  .done-title{ font-size:26px; margin:0 0 10px; }
+  .done-sub{ font-size:15.5px; color:var(--ink-soft); line-height:1.6; margin:0 0 6px; }
+
+  .foot-note{
+    text-align:center;
+    font-size:12.5px;
+    color:var(--ink-soft);
+    margin-top:18px;
+    opacity:0.85;
+  }
+
+  @media (max-width:480px){
+    .card{ padding:28px 20px 24px; border-radius:22px; }
+    .q-title{ font-size:22px; }
+    .intro-title{ font-size:25px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<div class="wrap">
+  <div class="stage">
+    <div class="brand">
+      <span class="brand-mark"></span>
+      <span class="brand-name">קליניק מאצ׳</span>
+    </div>
+
+    <div class="card" id="card">
+
+      <!-- progress dots, hidden on intro + thank you -->
+      <div class="progress" id="progress"></div>
+
+      <!-- Step 0: Intro -->
+      <div class="step visible" data-step="intro">
+        <div class="intro-art"></div>
+        <h1 class="intro-title">מצאי את הטיפול האסתטי המתאים לך</h1>
+        <p class="intro-sub">שאלון קצר של דקה אחת. בסופו נחבר אותך להצעת מחיר מותאמת אישית מקליניקות מובילות באזור מגוריך.</p>
+        <div class="intro-points">
+          <div class="intro-point"><span class="ic">✓</span> 4 שאלות בלבד, פחות מדקה</div>
+          <div class="intro-point"><span class="ic">✓</span> התאמה לפי אזור מגורים</div>
+          <div class="intro-point"><span class="ic">✓</span> ללא התחייבות</div>
+        </div>
+        <div class="nav-row">
+          <button class="btn btn-primary" onclick="goNext()">בואי נתחיל</button>
+        </div>
+      </div>
+
+      <!-- Step 1: Q1 multi select -->
+      <div class="step" data-step="q1">
+        <p class="eyebrow">שאלה 1 מתוך 4</p>
+        <h2 class="q-title">אילו טיפולים מעניינים אותך?</h2>
+        <p class="q-sub">אפשר לבחור יותר מאפשרות אחת</p>
+        <div class="options" id="opts-q1"></div>
+        <div class="nav-row">
+          <button class="btn btn-ghost" onclick="goPrev()">חזרה</button>
+          <button class="btn btn-primary" id="next-q1" onclick="goNext()" disabled>המשך</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Q2 single -->
+      <div class="step" data-step="q2">
+        <p class="eyebrow">שאלה 2 מתוך 4</p>
+        <h2 class="q-title">האם כבר עברת טיפול אסתטי בעבר?</h2>
+        <p class="q-sub">&nbsp;</p>
+        <div class="options" id="opts-q2"></div>
+        <div class="nav-row">
+          <button class="btn btn-ghost" onclick="goPrev()">חזרה</button>
+          <button class="btn btn-primary" id="next-q2" onclick="goNext()" disabled>המשך</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Q3 single -->
+      <div class="step" data-step="q3">
+        <p class="eyebrow">שאלה 3 מתוך 4</p>
+        <h2 class="q-title">מתי היית רוצה להתחיל טיפול?</h2>
+        <p class="q-sub">&nbsp;</p>
+        <div class="options" id="opts-q3"></div>
+        <div class="nav-row">
+          <button class="btn btn-ghost" onclick="goPrev()">חזרה</button>
+          <button class="btn btn-primary" id="next-q3" onclick="goNext()" disabled>המשך</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Q4 single -->
+      <div class="step" data-step="q4">
+        <p class="eyebrow">שאלה 4 מתוך 4</p>
+        <h2 class="q-title">באיזה אזור בארץ את/ה גר/ה?</h2>
+        <p class="q-sub">&nbsp;</p>
+        <div class="options" id="opts-q4"></div>
+        <div class="nav-row">
+          <button class="btn btn-ghost" onclick="goPrev()">חזרה</button>
+          <button class="btn btn-primary" id="next-q4" onclick="goNext()" disabled>המשך</button>
+        </div>
+      </div>
+
+      <!-- Step 5: contact -->
+      <div class="step" data-step="contact">
+        <p class="eyebrow">כמעט סיימנו</p>
+        <h2 class="q-title">לאן נשלח את ההצעה?</h2>
+        <p class="q-sub">נחזור אליך עם הצעת מחיר מותאמת אישית תוך זמן קצר</p>
+        <div class="field" id="field-name">
+          <label for="input-name">שם מלא</label>
+          <input type="text" id="input-name" placeholder="לדוגמה: נועה כהן" autocomplete="name">
+          <div class="error-msg">נא להזין שם מלא</div>
+        </div>
+        <div class="field" id="field-phone">
+          <label for="input-phone">מספר טלפון</label>
+          <input type="tel" id="input-phone" placeholder="050-0000000" autocomplete="tel" inputmode="tel">
+          <div class="error-msg">נא להזין מספר טלפון תקין</div>
+        </div>
+        <div class="nav-row">
+          <button class="btn btn-ghost" onclick="goPrev()">חזרה</button>
+          <button class="btn btn-primary" id="submit-btn" onclick="submitLead()">קבלי הצעת מחיר</button>
+        </div>
+      </div>
+
+      <!-- Step 6: thank you -->
+      <div class="step" data-step="done">
+        <div class="done-wrap">
+          <div class="done-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+              <path d="M4 12.5L9.5 18L20 6" stroke="#8F3F4E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h2 class="done-title">תודה! הפרטים התקבלו</h2>
+          <p class="done-sub">נחזור אליך בהקדם עם הצעת מחיר מותאמת אישית להתאמה שלך.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="foot-note">הפרטים שלך נשמרים בבטחה ומשמשים אך ורק לצורך יצירת קשר בנוגע לטיפול המבוקש</p>
+  </div>
+</div>
+
+<script>
+/* ====== CONFIG ======
+   Paste the Google Apps Script Web App URL here after deploying (see /README.md).
+*/
+const GAS_ENDPOINT = "PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";
+
+/* ====== Question data ====== */
+const Q1_OPTIONS = [
+  "הזרקות ומילויים (בוטוקס, חומצה היאלורונית ועוד)",
+  "חידוש והצערת עור (אנטי אייג'ינג, שיפור מרקם ואיכות העור)",
+  "עיצוב וחיטוב גוף ללא ניתוח",
+  "פיסול ועיצוב פנים",
+  "לא בטוח/ה - רוצה המלצה מקצועית"
+];
+const Q2_OPTIONS = [
+  "כן, ואני מחפש/ת להמשיך או לחזור",
+  "לא, זו הפעם הראשונה שלי",
+  "לא בטוח/ה עדיין"
+];
+const Q3_OPTIONS = [
+  "השבוע-השבועיים הקרובים",
+  "החודש",
+  "בודק/ת אפשרויות לעתיד"
+];
+const Q4_OPTIONS = [
+  "צפון",
+  "חיפה והקריות",
+  "השרון",
+  "גוש דן",
+  "ירושלים והסביבה",
+  "מרכז / שפלה",
+  "דרום"
+];
+
+const STEPS = ["intro","q1","q2","q3","q4","contact","done"];
+let currentIndex = 0;
+const answers = { q1: [], q2: null, q3: null, q4: null, name:"", phone:"" };
+
+const checkSvg = `<svg viewBox="0 0 12 12" fill="none"><path d="M2 6.2L4.6 9L10 3" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+function buildOptions(containerId, list, multi, answerKey){
+  const el = document.getElementById(containerId);
+  el.innerHTML = "";
+  list.forEach((text) => {
+    const opt = document.createElement("div");
+    opt.className = "opt " + (multi ? "multi" : "single");
+    opt.innerHTML = `<span class="opt-mark">${checkSvg}</span><span>${text}</span>`;
+    opt.addEventListener("click", () => {
+      if(multi){
+        const idx = answers[answerKey].indexOf(text);
+        if(idx > -1){
+          answers[answerKey].splice(idx,1);
+          opt.classList.remove("selected");
+        } else {
+          answers[answerKey].push(text);
+          opt.classList.add("selected");
+        }
+        document.getElementById("next-"+answerKey).disabled = answers[answerKey].length === 0;
+      } else {
+        answers[answerKey] = text;
+        [...el.children].forEach(c => c.classList.remove("selected"));
+        opt.classList.add("selected");
+        document.getElementById("next-"+answerKey).disabled = false;
+      }
+    });
+    el.appendChild(opt);
+  });
+}
+
+buildOptions("opts-q1", Q1_OPTIONS, true, "q1");
+buildOptions("opts-q2", Q2_OPTIONS, false, "q2");
+buildOptions("opts-q3", Q3_OPTIONS, false, "q3");
+buildOptions("opts-q4", Q4_OPTIONS, false, "q4");
+
+function renderProgress(){
+  const progEl = document.getElementById("progress");
+  const step = STEPS[currentIndex];
+  if(step === "intro" || step === "done"){
+    progEl.style.display = "none";
+    return;
+  }
+  progEl.style.display = "flex";
+  const questionSteps = ["q1","q2","q3","q4","contact"];
+  const activeIdx = questionSteps.indexOf(step);
+  progEl.innerHTML = "";
+  questionSteps.forEach((s, i) => {
+    const dot = document.createElement("span");
+    dot.className = "dot" + (i === activeIdx ? " active" : (i < activeIdx ? " done" : ""));
+    progEl.appendChild(dot);
+  });
+}
+
+function renderStep(){
+  document.querySelectorAll(".step").forEach(s => s.classList.remove("visible"));
+  const stepName = STEPS[currentIndex];
+  document.querySelector(`.step[data-step="${stepName}"]`).classList.add("visible");
+  renderProgress();
+  document.getElementById("card").scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function goNext(){
+  if(currentIndex < STEPS.length - 1){
+    currentIndex++;
+    renderStep();
+  }
+}
+function goPrev(){
+  if(currentIndex > 0){
+    currentIndex--;
+    renderStep();
+  }
+}
+
+/* ====== UTM capture ====== */
+function getUtmParams(){
+  const params = new URLSearchParams(window.location.search);
+  return {
+    utm_source: params.get("utm_source") || "",
+    utm_medium: params.get("utm_medium") || "",
+    utm_campaign: params.get("utm_campaign") || "",
+    utm_term: params.get("utm_term") || "",
+    utm_content: params.get("utm_content") || ""
+  };
+}
+const utmParams = getUtmParams();
+// persist across the session in case of navigation within the page
+try{
+  const existing = sessionStorage.getItem("utm_params");
+  if(existing){
+    Object.assign(utmParams, JSON.parse(existing));
+  } else {
+    sessionStorage.setItem("utm_params", JSON.stringify(utmParams));
+  }
+}catch(e){}
+
+/* ====== Validation + submit ====== */
+function validatePhone(value){
+  const digits = value.replace(/[^0-9]/g,"");
+  return digits.length >= 9 && digits.length <= 10;
+}
+
+function submitLead(){
+  const nameInput = document.getElementById("input-name");
+  const phoneInput = document.getElementById("input-phone");
+  const nameField = document.getElementById("field-name");
+  const phoneField = document.getElementById("field-phone");
+
+  let valid = true;
+  if(nameInput.value.trim().length < 2){
+    nameField.classList.add("has-error");
+    nameInput.classList.add("error");
+    valid = false;
+  } else {
+    nameField.classList.remove("has-error");
+    nameInput.classList.remove("error");
+  }
+  if(!validatePhone(phoneInput.value)){
+    phoneField.classList.add("has-error");
+    phoneInput.classList.add("error");
+    valid = false;
+  } else {
+    phoneField.classList.remove("has-error");
+    phoneInput.classList.remove("error");
+  }
+  if(!valid) return;
+
+  answers.name = nameInput.value.trim();
+  answers.phone = phoneInput.value.trim();
+
+  const btn = document.getElementById("submit-btn");
+  btn.disabled = true;
+  btn.textContent = "שולח...";
+
+  const payload = new URLSearchParams();
+  payload.append("name", answers.name);
+  payload.append("phone", answers.phone);
+  payload.append("interests", answers.q1.join(" | "));
+  payload.append("experience", answers.q2 || "");
+  payload.append("urgency", answers.q3 || "");
+  payload.append("location", answers.q4 || "");
+  payload.append("utm_source", utmParams.utm_source);
+  payload.append("utm_medium", utmParams.utm_medium);
+  payload.append("utm_campaign", utmParams.utm_campaign);
+  payload.append("utm_term", utmParams.utm_term);
+  payload.append("utm_content", utmParams.utm_content);
+
+  fetch(GAS_ENDPOINT, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: payload.toString()
+  })
+  .catch(() => {})
+  .finally(() => {
+    goNext(); // move to "done" step regardless (no-cors gives opaque response)
+  });
+}
+
+renderStep();
+</script>
+
+</body>
+</html>
