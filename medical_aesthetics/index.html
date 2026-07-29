@@ -506,6 +506,23 @@
     .btn-cta{ padding:19px 20px; font-size:17px; }
   }
 </style>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1908154796822425');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1908154796822425&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 </head>
 <body>
 
@@ -531,7 +548,7 @@
           <div class="intro-point"><span class="ic">✓</span> ללא התחייבות</div>
         </div>
         <div class="nav-row">
-          <button class="btn btn-primary btn-cta" onclick="goNext()">בואי נתחיל</button>
+          <button class="btn btn-primary btn-cta" onclick="fbq('trackCustom', 'QuizStart'); goNext();">בואי נתחיל</button>
         </div>
       </div>
 
@@ -742,6 +759,9 @@ function renderStep(){
   document.querySelector(`.step[data-step="${stepName}"]`).classList.add("visible");
   renderProgress();
   document.getElementById("card").scrollIntoView({behavior:"smooth", block:"start"});
+  if(["q1","q2","q3","q4"].includes(stepName) && typeof fbq === "function"){
+    fbq('trackCustom', 'QuizStep', { step: stepName });
+  }
 }
 
 function goNext(){
