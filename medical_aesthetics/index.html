@@ -760,7 +760,7 @@ function renderStep(){
   renderProgress();
   document.getElementById("card").scrollIntoView({behavior:"smooth", block:"start"});
   if(["q1","q2","q3","q4"].includes(stepName) && typeof fbq === "function"){
-    fbq('trackCustom', 'QuizStep', { step: stepName });
+    fbq('trackCustom', 'QuizStep_' + stepName);
   }
 }
 
