@@ -604,19 +604,6 @@
         </div>
       </div>
 
-      <!-- Step 6: thank you -->
-      <div class="step" data-step="done">
-        <div class="done-wrap">
-          <div class="done-icon">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-              <path d="M4 12.5L9.5 18L20 6" stroke="#8F3F4E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <h2 class="done-title">תודה! הפרטים התקבלו</h2>
-          <p class="done-sub">תודה, הכל מוכן. נחזור אליך בהקדם עם הפרטים.</p>
-        </div>
-      </div>
-
     </div>
 
   </div>
@@ -655,7 +642,7 @@ const Q4_OPTIONS = [
   { label:"הצפון", sub:"עכו, נהריה, טבריה", value:"הצפון (עכו, נהריה, טבריה)" }
 ];
 
-const STEPS = ["intro","q1","q2","q3","q4","contact","done"];
+const STEPS = ["intro","q1","q2","q3","q4","contact"];
 let currentIndex = 0;
 const answers = { q1: [], q2: null, q3: null, q4: null, name:"", phone:"" };
 
@@ -723,7 +710,7 @@ buildOptions("opts-q4", Q4_OPTIONS, false, "q4");
 function renderProgress(){
   const progEl = document.getElementById("progress");
   const step = STEPS[currentIndex];
-  if(step === "intro" || step === "done"){
+  if(step === "intro"){
     progEl.style.display = "none";
     return;
   }
@@ -851,7 +838,16 @@ function submitLead(){
   })
   .catch(() => {})
   .finally(() => {
-    goNext(); // move to "done" step regardless (no-cors gives opaque response)
+    // move to the standalone confirmation page (no-cors gives opaque response,
+    // so we redirect regardless of success/failure here)
+    const qs = new URLSearchParams({
+      utm_source: utmParams.utm_source,
+      utm_medium: utmParams.utm_medium,
+      utm_campaign: utmParams.utm_campaign,
+      utm_term: utmParams.utm_term,
+      utm_content: utmParams.utm_content
+    });
+    window.location.href = "/medical_aesthetics_quizCompleted?" + qs.toString();
   });
 }
 
