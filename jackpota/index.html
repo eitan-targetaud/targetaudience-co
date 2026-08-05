@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>JACKPOTA — Best Social Casino in the USA</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          display: ['"Baloo 2"', 'sans-serif'],
+          body: ['Inter', 'sans-serif'],
+        },
+        colors: {
+          ink: '#0b021d',
+          plum: '#260a4f',
+          panel: '#1a0a33',
+          gold: '#ffd700',
+          neon: '#3ae40e',
+          neondark: '#209904',
+        },
+        boxShadow: {
+          goldglow: '0 0 18px rgba(255,215,0,0.35)',
+          neonglow: '0 0 22px rgba(58,228,14,0.55)',
+        },
+      },
+    },
+  };
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: #0b021d;
+  }
+  .font-display { font-family: 'Baloo 2', sans-serif; }
+
+  ::-webkit-scrollbar { height: 8px; width: 8px; }
+  ::-webkit-scrollbar-thumb { background: #ffd70066; border-radius: 8px; }
+
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  @keyframes floatY {
+    0%, 100% { transform: translateY(0px) rotate(var(--r, 0deg)); }
+    50% { transform: translateY(-18px) rotate(var(--r2, 8deg)); }
+  }
+  .animate-floaty { animation: floatY 6s ease-in-out infinite; }
+
+  @keyframes spinSlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .animate-spin-slow { animation: spinSlow 22s linear infinite; }
+  .animate-spin-slow-rev { animation: spinSlow 30s linear infinite reverse; }
+
+  @keyframes pulseGlow {
+    0%, 100% { opacity: 0.55; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.06); }
+  }
+  .animate-pulse-glow { animation: pulseGlow 3.2s ease-in-out infinite; }
+
+  @keyframes shimmerGold {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+  .text-shimmer {
+    background: linear-gradient(90deg, #ffd700, #fff6c9, #ffd700, #b8860b, #ffd700);
+    background-size: 250% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmerGold 4.5s linear infinite;
+  }
+
+  @keyframes ctaPulse {
+    0%, 100% { box-shadow: 0 0 18px rgba(58,228,14,0.55), 0 0 0 0 rgba(58,228,14,0.4); }
+    50% { box-shadow: 0 0 30px rgba(58,228,14,0.85), 0 0 0 8px rgba(58,228,14,0); }
+  }
+  .cta-pulse { animation: ctaPulse 2.4s ease-in-out infinite; }
+
+  .wheel-seg {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 50%;
+    height: 3px;
+    transform-origin: left center;
+  }
+
+  .card-3d { transform-style: preserve-3d; }
+</style>
+</head>
+<body class="bg-ink">
+<div id="root"></div>
+
+<script type="text/babel" data-presets="react">
+const { useState, useRef, useEffect } = React;
+
+/* ---------------- Icons (inline SVG) ---------------- */
+const Icon = ({ children, className = "w-7 h-7" }) => (
+  <svg viewBox="0 0 24 24" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">{children}</svg>
+);
+
+const DiceIcon = (p) => (
+  <Icon {...p}>
+    <rect x="3" y="3" width="8" height="8" rx="2" stroke="currentColor" strokeWidth="1.6" />
+    <rect x="13" y="13" width="8" height="8" rx="2" stroke="currentColor" strokeWidth="1.6" />
+    <circle cx="6" cy="6" r="1" fill="currentColor" />
+    <circle cx="8" cy="8" r="1" fill="currentColor" />
+    <circle cx="16" cy="16" r="1" fill="currentColor" />
+    <circle cx="18" cy="18" r="1" fill="currentColor" />
+    <circle cx="16" cy="18" r="1" fill="currentColor" />
+    <circle cx="18" cy="16" r="1" fill="currentColor" />
+  </Icon>
+);
+
+const GiftIcon = (p) => (
+  <Icon {...p}>
+    <rect x="3" y="9" width="18" height="4" rx="1" stroke="currentColor" strokeWidth="1.6" />
+    <rect x="5" y="13" width="14" height="8" rx="1" stroke="currentColor" strokeWidth="1.6" />
+    <path d="M12 9V21" stroke="currentColor" strokeWidth="1.6" />
+    <path d="M12 9c0-2.5-1.5-5-4-5S6 6.5 8 9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    <path d="M12 9c0-2.5 1.5-5 4-5s2 3.5 0 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+  </Icon>
+);
+
+const SevenIcon = (p) => (
+  <Icon {...p}>
+    <rect x="2" y="4" width="6" height="16" rx="1.5" stroke="currentColor" strokeWidth="1.6" />
+    <rect x="9" y="4" width="6" height="16" rx="1.5" stroke="currentColor" strokeWidth="1.6" />
+    <rect x="16" y="4" width="6" height="16" rx="1.5" stroke="currentColor" strokeWidth="1.6" />
+    <path d="M4 8h2M11 8h2M18 8h2" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+  </Icon>
+);
+
+const HeadsetIcon = (p) => (
+  <Icon {...p}>
+    <path d="M4 13v-1a8 8 0 0116 0v1" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    <rect x="2.5" y="13" width="4.5" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.6" />
+    <rect x="17" y="13" width="4.5" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.6" />
+    <path d="M19.5 19v1a3 3 0 01-3 3h-3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+  </Icon>
+);
+
+const StarIcon = ({ className = "w-6 h-6", filled = true }) => (
+  <svg viewBox="0 0 24 24" className={className} xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 2.5l2.9 6.6 7.1.7-5.4 4.7 1.7 7-6.3-3.8L5.7 21.5l1.7-7-5.4-4.7 7.1-.7L12 2.5z"
+      fill={filled ? "#ffd700" : "none"} stroke="#ffd700" strokeWidth="1" />
+  </svg>
+);
+
+const ChevronLeft = (p) => (
+  <Icon {...p}><path d="M15 5l-7 7 7 7" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></Icon>
+);
+const ChevronRight = (p) => (
+  <Icon {...p}><path d="M9 5l7 7-7 7" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></Icon>
+);
+
+const CherryEmoji = ({ className }) => <span className={className}>🍒</span>;
+const CoinEmoji = ({ className }) => <span className={className}>🪙</span>;
+const DiceEmoji = ({ className }) => <span className={className}>🎲</span>;
+const GemEmoji = ({ className }) => <span className={className}>💎</span>;
+const BellEmoji = ({ className }) => <span className={className}>🔔</span>;
+const SevenEmoji = ({ className }) => <span className={className}>7️⃣</span>;
+
+/* ---------------- Floating background decor ---------------- */
+function FloatingDecor() {
+  const items = [
+    { El: DiceEmoji, top: "8%", left: "4%", size: "text-4xl", delay: "0s", dur: "7s" },
+    { El: CherryEmoji, top: "18%", left: "92%", size: "text-5xl", delay: "1.2s", dur: "6s" },
+    { El: CoinEmoji, top: "42%", left: "2%", size: "text-3xl", delay: "0.6s", dur: "8s" },
+    { El: GemEmoji, top: "68%", left: "95%", size: "text-4xl", delay: "2s", dur: "6.5s" },
+    { El: DiceEmoji, top: "88%", left: "8%", size: "text-3xl", delay: "1.6s", dur: "7.5s" },
+    { El: SevenEmoji, top: "30%", left: "50%", size: "text-3xl", delay: "0.3s", dur: "9s" },
+    { El: CoinEmoji, top: "78%", left: "60%", size: "text-4xl", delay: "2.4s", dur: "7s" },
+    { El: BellEmoji, top: "5%", left: "60%", size: "text-3xl", delay: "1s", dur: "6s" },
+  ];
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-40 select-none z-0">
+      {items.map((it, i) => (
+        <div
+          key={i}
+          className={`absolute ${it.size} animate-floaty drop-shadow-[0_0_10px_rgba(255,215,0,0.25)]`}
+          style={{ top: it.top, left: it.left, animationDelay: it.delay, animationDuration: it.dur }}
+        >
+          <it.El />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ---------------- Header ---------------- */
+function Header() {
+  return (
+    <header className="relative z-20 flex items-center justify-between px-5 sm:px-8 lg:px-16 py-5">
+      <div className="flex items-center gap-2">
+        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-gold to-yellow-600 flex items-center justify-center shadow-goldglow">
+          <span className="text-ink font-display font-800 text-lg">J</span>
+        </div>
+        <span className="font-display font-700 text-xl sm:text-2xl tracking-wide text-white">
+          JACKPOT<span className="text-shimmer">A</span>
+        </span>
+      </div>
+      <a
+        href="#join"
+        className="hidden sm:inline-flex items-center px-6 py-2.5 rounded-full bg-gradient-to-b from-neon to-neondark text-white font-display font-700 uppercase tracking-wide text-sm shadow-neonglow hover:scale-105 hover:brightness-110 transition-all duration-200"
+      >
+        Join Now
+      </a>
+    </header>
+  );
+}
+
+/* ---------------- Hero + Wheel ---------------- */
+function PrizeWheel() {
+  const segments = ["7️⃣", "🍒", "💰", "⭐", "🔔", "💎", "🍋", "🎲"];
+  const colors = ["#3ae40e", "#7b1fa2", "#ffd700", "#4a0e78", "#3ae40e", "#7b1fa2", "#ffd700", "#4a0e78"];
+  const conic = colors.map((c, i) => `${c} ${i * 45}deg ${(i + 1) * 45}deg`).join(",");
+
+  return (
+    <div className="relative w-[280px] h-[280px] sm:w-[360px] sm:h-[360px] lg:w-[420px] lg:h-[420px] mx-auto flex items-center justify-center">
+      {/* glow rays */}
+      <div
+        className="absolute inset-[-40%] rounded-full animate-spin-slow-rev opacity-70"
+        style={{
+          background: "conic-gradient(from 0deg, rgba(255,215,0,0.25) 0deg, transparent 12deg, transparent 24deg, rgba(255,215,0,0.25) 36deg, transparent 48deg, transparent 60deg, rgba(255,215,0,0.25) 72deg, transparent 84deg)",
+          filter: "blur(6px)",
+        }}
+      />
+      <div className="absolute inset-[-15%] rounded-full bg-gold/20 blur-3xl animate-pulse-glow" />
+
+      {/* outer ring */}
+      <div className="absolute inset-0 rounded-full border-[6px] border-gold shadow-goldglow" />
+
+      {/* wheel */}
+      <div
+        className="absolute inset-3 rounded-full animate-spin-slow border-4 border-yellow-200/60"
+        style={{ background: `conic-gradient(${conic})` }}
+      >
+        {segments.map((s, i) => (
+          <div
+            key={i}
+            className="absolute inset-0 flex items-start justify-center"
+            style={{ transform: `rotate(${i * 45 + 22.5}deg)` }}
+          >
+            <span className="mt-4 text-xl sm:text-2xl drop-shadow-md">{s}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* hub */}
+      <div className="absolute w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-yellow-200 to-gold border-4 border-white shadow-goldglow flex items-center justify-center z-10">
+        <span className="font-display font-800 text-ink text-xs sm:text-sm text-center leading-tight">SPIN<br />THE WHEEL</span>
+      </div>
+
+      {/* pointer */}
+      <div className="absolute -top-2 z-10" style={{ filter: "drop-shadow(0 0 6px rgba(255,215,0,0.8))" }}>
+        <div className="w-0 h-0 border-l-[14px] border-l-transparent border-r-[14px] border-r-transparent border-t-[22px] border-t-neon" />
+      </div>
+    </div>
+  );
+}
+
+function Hero() {
+  return (
+    <section className="relative z-10 px-5 sm:px-8 lg:px-16 pt-6 pb-16 lg:pt-10 lg:pb-24">
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 items-center">
+        <div className="text-center lg:text-left">
+          <span className="inline-block mb-4 px-4 py-1 rounded-full bg-panel/70 border border-gold/40 text-gold text-xs sm:text-sm font-semibold uppercase tracking-widest">
+            100% Free-to-Play Sweepstakes
+          </span>
+          <h1 className="font-display font-800 text-4xl sm:text-5xl lg:text-6xl leading-tight text-white">
+            Best <span className="text-shimmer">Social Casino</span> in the USA
+          </h1>
+          <p className="mt-5 font-display font-600 text-lg sm:text-xl text-neon drop-shadow-[0_0_10px_rgba(58,228,14,0.6)] uppercase tracking-wide">
+            Spin to win instant prizes &amp; jackpots!
+          </p>
+          <p className="mt-4 text-white/60 max-w-md mx-auto lg:mx-0 text-sm sm:text-base">
+            Join over a million players spinning slots, winning Gold Coins, and redeeming real prizes — no purchase necessary.
+          </p>
+          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+            <a
+              id="join"
+              href="#join"
+              className="cta-pulse inline-flex items-center justify-center px-10 py-4 rounded-full bg-gradient-to-b from-neon to-neondark text-white font-display font-800 uppercase tracking-wide text-base shadow-neonglow hover:scale-105 hover:brightness-110 transition-all duration-200"
+            >
+              Join Now
+            </a>
+            <div className="flex items-center gap-1">
+              {[...Array(5)].map((_, i) => <StarIcon key={i} className="w-5 h-5" />)}
+              <span className="ml-2 text-white/70 text-sm">4.8/5 from 12,400+ players</span>
+            </div>
+          </div>
+        </div>
+        <PrizeWheel />
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Feature cards ---------------- */
+function Features() {
+  const items = [
+    { Icon: DiceIcon, title: "Over 1,500 Games" },
+    { Icon: GiftIcon, title: "Daily Bonus" },
+    { Icon: SevenIcon, title: "Popular Slots" },
+    { Icon: HeadsetIcon, title: "24/7 Customer Support" },
+  ];
+  return (
+    <section className="relative z-10 px-5 sm:px-8 lg:px-16 py-10">
+      <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        {items.map(({ Icon, title }, i) => (
+          <div
+            key={i}
+            className="group relative rounded-2xl bg-panel/80 border border-gold/30 p-5 sm:p-6 flex flex-col items-center text-center gap-3 shadow-[inset_0_0_20px_rgba(255,215,0,0.06)] hover:border-gold/70 hover:shadow-goldglow transition-all duration-300 hover:-translate-y-1"
+          >
+            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-plum to-ink border border-gold/40 flex items-center justify-center text-gold group-hover:text-neon group-hover:border-neon/60 transition-colors duration-300">
+              <Icon className="w-7 h-7" />
+            </div>
+            <p className="font-display font-700 uppercase text-xs sm:text-sm tracking-wide text-white">{title}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Slot games carousel ---------------- */
+function SlotCarousel() {
+  const games = [
+    { name: "Golden Sevens", grad: "from-yellow-500 via-amber-600 to-yellow-800", emoji: "7️⃣" },
+    { name: "Cherry Pop", grad: "from-pink-500 via-red-500 to-red-700", emoji: "🍒" },
+    { name: "Diamond Rush", grad: "from-cyan-400 via-blue-500 to-blue-800", emoji: "💎" },
+    { name: "Wild Bells", grad: "from-purple-500 via-fuchsia-600 to-purple-800", emoji: "🔔" },
+    { name: "Coin Fortune", grad: "from-amber-400 via-orange-500 to-orange-700", emoji: "🪙" },
+    { name: "Lucky Dice", grad: "from-green-400 via-emerald-600 to-green-800", emoji: "🎲" },
+  ];
+  const scrollRef = useRef(null);
+  const scrollByCards = (dir) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const amount = Math.min(el.clientWidth * 0.8, 600) * dir;
+    el.scrollBy({ left: amount, behavior: "smooth" });
+  };
+
+  return (
+    <section className="relative z-10 px-5 sm:px-8 lg:px-16 py-14">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="font-display font-800 text-2xl sm:text-3xl text-shimmer uppercase tracking-wide">Slot Games</h2>
+          <div className="flex items-center gap-3">
+            <button className="text-gold text-sm sm:text-base font-semibold border border-gold/40 rounded-full px-4 py-1.5 hover:bg-gold/10 transition-colors">
+              See all
+            </button>
+            <button
+              onClick={() => scrollByCards(-1)}
+              aria-label="Previous games"
+              className="w-9 h-9 rounded-full bg-panel border border-gold/40 flex items-center justify-center text-gold hover:bg-gold hover:text-ink transition-colors"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => scrollByCards(1)}
+              aria-label="Next games"
+              className="w-9 h-9 rounded-full bg-panel border border-gold/40 flex items-center justify-center text-gold hover:bg-gold hover:text-ink transition-colors"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+
+        <div ref={scrollRef} className="flex gap-4 sm:gap-5 overflow-x-auto no-scrollbar scroll-smooth pb-2">
+          {games.map((g, i) => (
+            <div
+              key={i}
+              className="group relative flex-shrink-0 w-[150px] sm:w-[190px] lg:w-[210px] aspect-[3/4] rounded-2xl overflow-hidden border border-gold/30 cursor-pointer transition-transform duration-300 hover:scale-105 hover:border-gold shadow-lg"
+            >
+              <div className={`absolute inset-0 bg-gradient-to-br ${g.grad} opacity-90`} />
+              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
+              <div className="relative h-full flex flex-col items-center justify-center gap-3 p-3">
+                <span className="text-5xl sm:text-6xl drop-shadow-lg group-hover:scale-110 transition-transform duration-300">{g.emoji}</span>
+                <span className="font-display font-700 text-white text-sm sm:text-base text-center drop-shadow">{g.name}</span>
+              </div>
+              <div className="absolute bottom-0 inset-x-0 py-2 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity text-center">
+                <span className="text-xs font-display font-700 text-neon uppercase tracking-wide">Play Now</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Testimonials ---------------- */
+function Testimonials() {
+  const testimonials = [
+    {
+      quote: "Thanks Jame. All of your winnings and the coins are incredible! My life has definitely changed and I cannot thank you enough!",
+      author: "Jame",
+    },
+    {
+      quote: "I spin every single day on my lunch break — the daily bonus alone makes it worth logging in. Redeeming prizes was so easy!",
+      author: "Marcus T.",
+    },
+    {
+      quote: "Best social casino app I've tried. Over 1,500 games and the support team actually responds fast. Highly recommend!",
+      author: "Priya K.",
+    },
+  ];
+  const [idx, setIdx] = useState(0);
+  const len = testimonials.length;
+  const next = () => setIdx((i) => (i + 1) % len);
+  const prev = () => setIdx((i) => (i - 1 + len) % len);
+
+  return (
+    <section className="relative z-10 px-5 sm:px-8 lg:px-16 py-16">
+      <div className="max-w-3xl mx-auto text-center">
+        <div className="flex items-center justify-center gap-1 mb-6">
+          {[...Array(5)].map((_, i) => <StarIcon key={i} className="w-7 h-7 sm:w-8 sm:h-8" />)}
+        </div>
+
+        <div className="flex items-center justify-center gap-4 sm:gap-8">
+          <button
+            onClick={prev}
+            aria-label="Previous testimonial"
+            className="flex-shrink-0 w-10 h-10 rounded-full bg-panel border border-gold/40 flex items-center justify-center text-gold hover:bg-gold hover:text-ink transition-colors"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+
+          <div className="min-h-[140px] flex flex-col items-center justify-center">
+            <p className="font-display text-lg sm:text-2xl text-white leading-relaxed">
+              "{testimonials[idx].quote}"
+            </p>
+            <p className="mt-5 text-gold font-display font-700 uppercase tracking-wide text-sm sm:text-base">
+              — {testimonials[idx].author}
+            </p>
+          </div>
+
+          <button
+            onClick={next}
+            aria-label="Next testimonial"
+            className="flex-shrink-0 w-10 h-10 rounded-full bg-panel border border-gold/40 flex items-center justify-center text-gold hover:bg-gold hover:text-ink transition-colors"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="flex items-center justify-center gap-2 mt-6">
+          {testimonials.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setIdx(i)}
+              aria-label={`Go to testimonial ${i + 1}`}
+              className={`w-2.5 h-2.5 rounded-full transition-colors ${i === idx ? "bg-gold" : "bg-white/20"}`}
+            />
+          ))}
+        </div>
+
+        <a
+          href="#join"
+          className="cta-pulse mt-10 inline-flex items-center justify-center px-10 py-4 rounded-full bg-gradient-to-b from-neon to-neondark text-white font-display font-800 uppercase tracking-wide text-base shadow-neonglow hover:scale-105 hover:brightness-110 transition-all duration-200"
+        >
+          Join Now
+        </a>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Footer ---------------- */
+function Footer() {
+  return (
+    <footer className="relative z-10 px-5 sm:px-8 lg:px-16 py-12">
+      <div className="max-w-7xl mx-auto">
+        <div className="rounded-2xl bg-black/40 backdrop-blur border border-white/10 p-6 sm:p-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-yellow-600 flex items-center justify-center">
+                <span className="text-ink font-display font-800 text-sm">J</span>
+              </div>
+              <span className="font-display font-700 text-lg text-white">JACKPOTA</span>
+            </div>
+            <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs sm:text-sm text-white/50">
+              <a href="#" className="hover:text-gold transition-colors">Terms of Service</a>
+              <a href="#" className="hover:text-gold transition-colors">Privacy Policy</a>
+              <a href="#" className="hover:text-gold transition-colors">Responsible Gaming</a>
+              <a href="#" className="hover:text-gold transition-colors">Contact Us</a>
+            </div>
+          </div>
+
+          <div className="space-y-3 text-[11px] sm:text-xs leading-relaxed text-white/40">
+            <p>
+              JACKPOTA is a free-to-play social casino. No purchase is necessary to play or win. Void where prohibited by law.
+              This platform offers a sweepstakes promotion and is intended for amusement purposes only. Gold Coins have no
+              cash value and cannot be redeemed for cash or prizes. Sweeps Coins may be redeemed for cash prizes subject to
+              our Terms of Service and applicable eligibility requirements.
+            </p>
+            <p>
+              You must be 18 years of age or older (19+ in AL and NE, 21+ in AZ) and a legal resident of the United States
+              (excluding Washington, Idaho, Michigan, and Nevada) to participate. By using this site, you agree to our
+              Terms of Service, Privacy Policy, and Sweepstakes Rules.
+            </p>
+            <p>
+              Play responsibly. If you or someone you know has a gambling problem and wants help, call{" "}
+              <span className="text-gold font-semibold">1-800-GAMBLER</span>, or visit{" "}
+              <span className="text-gold">ncpgambling.org</span>. Additional support: Gamblers Anonymous at{" "}
+              <span className="text-gold">gamblersanonymous.org</span>.
+            </p>
+            <p className="pt-2 border-t border-white/10">
+              © {new Date().getFullYear()} JACKPOTA. All rights reserved. All trademarks are property of their respective owners.
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+/* ---------------- App ---------------- */
+function App() {
+  return (
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-[#0b021d] via-[#170432] to-[#260a4f] text-white font-body">
+      {/* ambient radial glows */}
+      <div className="pointer-events-none absolute top-[-10%] left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full bg-purple-700/20 blur-[120px] z-0" />
+      <div className="pointer-events-none absolute top-[30%] right-[-10%] w-[500px] h-[500px] rounded-full bg-neon/10 blur-[100px] z-0" />
+      <div className="pointer-events-none absolute bottom-[5%] left-[-10%] w-[500px] h-[500px] rounded-full bg-gold/10 blur-[100px] z-0" />
+
+      <FloatingDecor />
+
+      <div className="relative z-10">
+        <Header />
+        <Hero />
+        <Features />
+        <SlotCarousel />
+        <Testimonials />
+        <Footer />
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
