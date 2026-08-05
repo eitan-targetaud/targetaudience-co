@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Best Social Casino in the USA</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:'Poppins', sans-serif;
+    background:#150a2e;
+    color:#fff;
+    overflow-x:hidden;
+  }
+  a { text-decoration:none; color:inherit; }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    position:relative;
+    background: radial-gradient(circle at 75% 20%, #4b2a86 0%, #2a1454 45%, #180a34 100%);
+    padding: 70px 6% 90px;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      radial-gradient(2px 2px at 10% 20%, rgba(255,255,255,.6) 0, transparent 100%),
+      radial-gradient(2px 2px at 30% 70%, rgba(255,255,255,.5) 0, transparent 100%),
+      radial-gradient(1.5px 1.5px at 60% 15%, rgba(255,255,255,.5) 0, transparent 100%),
+      radial-gradient(1.5px 1.5px at 80% 60%, rgba(255,255,255,.4) 0, transparent 100%),
+      radial-gradient(2px 2px at 45% 85%, rgba(255,255,255,.5) 0, transparent 100%),
+      radial-gradient(1.5px 1.5px at 90% 30%, rgba(255,255,255,.4) 0, transparent 100%);
+    pointer-events:none;
+  }
+  .hero-inner{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    max-width:1300px;
+    margin:0 auto;
+    flex-wrap:wrap;
+    gap:40px;
+  }
+  .hero-copy{ max-width:560px; flex:1 1 420px; z-index:2; }
+  .hero-copy h1{
+    font-size:clamp(32px,4.2vw,52px);
+    font-weight:800;
+    line-height:1.15;
+    text-transform:uppercase;
+  }
+  .hero-copy h1 .accent{
+    background:linear-gradient(180deg,#ffd977,#f5a623);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .hero-copy p{
+    margin-top:18px;
+    font-size:clamp(16px,1.6vw,20px);
+    font-weight:600;
+    color:#e6def7;
+    line-height:1.5;
+  }
+  .btn-join{
+    display:inline-block;
+    margin-top:32px;
+    padding:16px 48px;
+    font-size:19px;
+    font-weight:700;
+    color:#fff;
+    background:linear-gradient(180deg,#5fd85f,#2e9e2e);
+    border:2px solid #3fbf3f;
+    border-radius:40px;
+    box-shadow:0 6px 0 #1d6e1d, 0 10px 20px rgba(0,0,0,.35);
+    cursor:pointer;
+    transition:transform .15s ease;
+  }
+  .btn-join:hover{ transform:translateY(-2px); }
+
+  .wheel-wrap{
+    position:relative;
+    flex:1 1 380px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:420px;
+  }
+  .wheel-glow{
+    position:absolute;
+    width:420px; height:420px;
+    background:radial-gradient(circle, rgba(255,210,90,.35) 0%, transparent 70%);
+    filter:blur(10px);
+  }
+  .wheel{
+    position:relative;
+    width:340px; height:340px;
+    border-radius:50%;
+    background:
+      conic-gradient(
+        #d6483f 0deg 30deg,
+        #3d8f4f 30deg 60deg,
+        #d6483f 60deg 90deg,
+        #2e6fbf 90deg 120deg,
+        #d6483f 120deg 150deg,
+        #3d8f4f 150deg 180deg,
+        #d6483f 180deg 210deg,
+        #2e6fbf 210deg 240deg,
+        #d6483f 240deg 270deg,
+        #3d8f4f 270deg 300deg,
+        #d6483f 300deg 330deg,
+        #2e6fbf 330deg 360deg
+      );
+    border:10px solid #f5c451;
+    box-shadow:0 0 0 4px #7a4a1a, 0 15px 40px rgba(0,0,0,.5);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .wheel::before{
+    content:"";
+    position:absolute; inset:-10px;
+    border-radius:50%;
+    background:
+      repeating-conic-gradient(#f7d98a 0deg 6deg, transparent 6deg 18deg);
+    z-index:-1;
+    opacity:.9;
+  }
+  .wheel-label{
+    position:relative;
+    width:210px; text-align:center;
+    transform:rotate(-6deg);
+    font-weight:900;
+    font-size:34px;
+    line-height:1;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    background:linear-gradient(180deg,#ffe37a,#f5a623,#e2751a);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    -webkit-text-stroke:1.5px #7a3d0a;
+    filter:drop-shadow(0 4px 3px rgba(0,0,0,.45));
+  }
+  .wheel-label small{
+    display:block;
+    font-size:20px;
+    letter-spacing:3px;
+  }
+  .wheel-pointer{
+    position:absolute; top:-18px; left:50%;
+    transform:translateX(-50%);
+    width:0; height:0;
+    border-left:16px solid transparent;
+    border-right:16px solid transparent;
+    border-top:26px solid #f5c451;
+    filter:drop-shadow(0 3px 2px rgba(0,0,0,.4));
+    z-index:3;
+  }
+  .wheel-hub{
+    position:absolute; top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    width:34px; height:34px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #fff2c0, #d68f1c);
+    box-shadow:0 3px 6px rgba(0,0,0,.5);
+    z-index:4;
+  }
+  .coin{
+    position:absolute;
+    font-size:34px;
+    filter:drop-shadow(0 4px 6px rgba(0,0,0,.4));
+    animation:float 4s ease-in-out infinite;
+  }
+  .coin.c1{ top:6%; left:2%; font-size:44px; animation-delay:0s; }
+  .coin.c2{ top:0%; left:46%; font-size:30px; animation-delay:.5s; }
+  .coin.c3{ top:12%; right:4%; font-size:52px; animation-delay:1s; }
+  .coin.c4{ bottom:4%; left:0%; font-size:60px; animation-delay:1.5s; }
+  .coin.c5{ bottom:18%; right:2%; font-size:34px; animation-delay:2s; }
+  .card7{
+    position:absolute; top:14%; right:1%;
+    font-size:46px; font-weight:800; color:#c73c4a;
+    text-shadow:2px 2px 0 #7a1622;
+    transform:rotate(-8deg);
+  }
+  @keyframes float{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-14px); }
+  }
+
+  /* ---------- FEATURES ---------- */
+  .features{
+    background:#0d0620;
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:24px;
+    padding:36px 6%;
+    border-top:1px solid rgba(255,255,255,.06);
+    border-bottom:1px solid rgba(255,255,255,.06);
+  }
+  .feature-card{
+    background:#1c1038;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;
+    padding:22px 34px;
+    text-align:center;
+    min-width:170px;
+    flex:1 1 170px;
+    max-width:230px;
+  }
+  .feature-card .icon{ font-size:30px; margin-bottom:10px; }
+  .feature-card .top{
+    font-size:13px;
+    letter-spacing:1px;
+    color:#b9adda;
+    text-transform:uppercase;
+  }
+  .feature-card .main{
+    font-size:19px;
+    font-weight:800;
+    letter-spacing:.5px;
+    margin-top:2px;
+  }
+  .feature-card.slots .main{ color:#e04b4b; }
+
+  /* ---------- SLOT GAMES ---------- */
+  .slots-section{
+    padding:44px 6% 30px;
+    background:#0d0620;
+  }
+  .slots-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    max-width:1300px;
+    margin:0 auto 20px;
+  }
+  .slots-header h2{
+    font-size:20px;
+    font-weight:800;
+    letter-spacing:1px;
+    text-transform:uppercase;
+  }
+  .see-all{
+    border:1px solid rgba(255,255,255,.25);
+    padding:6px 16px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:600;
+    color:#ddd;
+  }
+  .slots-row{
+    display:flex;
+    gap:16px;
+    overflow-x:auto;
+    max-width:1300px;
+    margin:0 auto;
+    padding-bottom:6px;
+    scrollbar-width:thin;
+  }
+  .slot-card{
+    flex:0 0 170px;
+    height:210px;
+    border-radius:14px;
+    position:relative;
+    display:flex;
+    align-items:flex-end;
+    padding:14px;
+    font-weight:800;
+    font-size:16px;
+    text-transform:uppercase;
+    text-align:center;
+    justify-content:center;
+    box-shadow:inset 0 -60px 50px -20px rgba(0,0,0,.75);
+    overflow:hidden;
+  }
+  .slot-card span{ position:relative; z-index:2; line-height:1.15; }
+  .slot-card::before{
+    content:attr(data-icon);
+    position:absolute;
+    top:50%; left:50%;
+    transform:translate(-50%,-60%);
+    font-size:56px;
+    opacity:.9;
+  }
+  .slot-1{ background:linear-gradient(160deg,#8a6a2c,#4a3517); }
+  .slot-2{ background:linear-gradient(160deg,#c1462f,#6f1d12); }
+  .slot-3{ background:linear-gradient(160deg,#7a3ac9,#3d1a6e); }
+  .slot-4{ background:linear-gradient(160deg,#c1462f,#4a0f0f); }
+  .slot-5{ background:linear-gradient(160deg,#2e8f6e,#0e3f30); }
+  .slot-6{ background:linear-gradient(160deg,#8a6a2c,#3a2a10); }
+
+  /* ---------- TESTIMONIAL ---------- */
+  .testimonial{
+    background:linear-gradient(180deg,#3a1868,#2a0f52);
+    text-align:center;
+    padding:50px 8% 60px;
+    position:relative;
+  }
+  .stars{ color:#f5c451; font-size:26px; letter-spacing:6px; margin-bottom:16px; }
+  .testimonial blockquote{
+    max-width:720px;
+    margin:0 auto;
+    font-size:19px;
+    font-weight:600;
+    line-height:1.5;
+    color:#f2edff;
+  }
+  .testimonial cite{
+    display:block;
+    margin-top:16px;
+    font-style:normal;
+    font-weight:700;
+    color:#f5a623;
+  }
+  .arrow{
+    position:absolute;
+    top:50%; transform:translateY(-50%);
+    font-size:26px;
+    color:#f5a623;
+    opacity:.8;
+  }
+  .arrow.left{ left:4%; }
+  .arrow.right{ right:4%; }
+
+  .btn-join-wrap{ text-align:center; margin-top:36px; }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background:#0a0518;
+    padding:30px 8% 40px;
+    font-size:11px;
+    line-height:1.6;
+    color:#7c7392;
+    text-align:center;
+  }
+  footer p{ max-width:1000px; margin:0 auto 10px; }
+  footer .warn{ color:#a89bcf; font-weight:600; }
+
+  @media (max-width:640px){
+    .hero{ padding:50px 6% 60px; text-align:center; }
+    .hero-inner{ flex-direction:column; }
+    .wheel{ width:260px; height:260px; }
+    .wheel-label{ font-size:24px; width:170px; }
+    .wheel-label small{ font-size:14px; }
+  }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <h1>Best Social Casino<br><span class="accent">in the USA</span></h1>
+      <p>Spin to win instant prizes &amp; jackpots!</p>
+      <a href="#join" class="btn-join">JOIN NOW</a>
+    </div>
+
+    <div class="wheel-wrap">
+      <div class="wheel-glow"></div>
+      <span class="coin c1">🪙</span>
+      <span class="coin c2">🍒</span>
+      <span class="coin c3">🪙</span>
+      <span class="coin c4">💵</span>
+      <span class="coin c5">🪙</span>
+      <span class="card7">7</span>
+      <div class="wheel">
+        <div class="wheel-pointer"></div>
+        <div class="wheel-hub"></div>
+        <div class="wheel-label">SPIN<br><small>THE WHEEL</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="feature-card">
+    <div class="icon">🎲</div>
+    <div class="top">Over</div>
+    <div class="main">1,500 Games</div>
+  </div>
+  <div class="feature-card">
+    <div class="icon">🎁</div>
+    <div class="top">Daily</div>
+    <div class="main">Bonus</div>
+  </div>
+  <div class="feature-card slots">
+    <div class="icon">🎰</div>
+    <div class="top">Popular Slots</div>
+    <div class="main">777</div>
+  </div>
+  <div class="feature-card">
+    <div class="icon">🛟</div>
+    <div class="top">24/7</div>
+    <div class="main">Customer Support</div>
+  </div>
+</section>
+
+<section class="slots-section">
+  <div class="slots-header">
+    <h2>Slot Games</h2>
+    <span class="see-all">See all</span>
+  </div>
+  <div class="slots-row">
+    <div class="slot-card slot-1" data-icon="🏛️"><span>Gold&nbsp;Pang</span></div>
+    <div class="slot-card slot-2" data-icon="7️⃣"><span>Ripe Slot Jack</span></div>
+    <div class="slot-card slot-3" data-icon="💎"><span>Fortune Slots</span></div>
+    <div class="slot-card slot-4" data-icon="7️⃣"><span>Jackpots</span></div>
+    <div class="slot-card slot-5" data-icon="🍀"><span>Green Mag</span></div>
+    <div class="slot-card slot-6" data-icon="⚡"><span>Mid Sky Slots</span></div>
+  </div>
+</section>
+
+<section class="testimonial">
+  <span class="arrow left">&#8249;</span>
+  <div class="stars">★★★★★</div>
+  <blockquote>
+    "Thanks Jame. All of your winnings and the coins are incredible! My life has definitely changed and I cannot thank you enough!"
+    <cite>Jame</cite>
+  </blockquote>
+  <span class="arrow right">&#8250;</span>
+
+  <div class="btn-join-wrap">
+    <a href="#join" class="btn-join">JOIN NOW</a>
+  </div>
+</section>
+
+<footer>
+  <p>This site is intended for use by adults who reside in jurisdictions where social casino-style entertainment is permitted. The legal availability of this site's virtual coin experience varies by location and is subject to eligibility requirements. Use of this application and its content is void where prohibited by law.</p>
+  <p class="warn">No purchase is necessary to play or win. Virtual coins have no cash value and cannot be redeemed for real money or prizes. Please play responsibly.</p>
+</footer>
+
+</body>
+</html>
