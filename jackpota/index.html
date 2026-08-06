@@ -634,27 +634,11 @@ function Testimonials() {
 
 /* ---------------- Footer ---------------- */
 function Footer() {
-  const links = ["Terms of Service", "Privacy Policy", "Responsible Gaming", "Partner With Us"];
-  const socials = [FacebookIcon, InstagramIcon, XIcon, DiscordIcon, YoutubeIcon];
   return /*#__PURE__*/React.createElement("footer", {
     className: "relative z-10 px-5 sm:px-8 lg:px-10 py-12 border-t border-white/10"
   }, /*#__PURE__*/React.createElement("div", {
     className: "max-w-7xl mx-auto"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "flex flex-wrap gap-3 mb-6"
-  }, links.map((l, i) => /*#__PURE__*/React.createElement("a", {
-    key: i,
-    href: "#",
-    className: "text-xs sm:text-sm text-white/60 border border-white/15 rounded-full px-4 py-1.5 hover:border-gold/60 hover:text-gold transition-colors"
-  }, l))), /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center gap-3 mb-8"
-  }, socials.map((S, i) => /*#__PURE__*/React.createElement("a", {
-    key: i,
-    href: "#",
-    className: "w-9 h-9 rounded-full border border-white/15 flex items-center justify-center text-white/50 hover:text-gold hover:border-gold/50 transition-colors"
-  }, /*#__PURE__*/React.createElement(S, {
-    className: "w-4 h-4"
-  })))), /*#__PURE__*/React.createElement("div", {
     className: "rounded-2xl bg-black/40 backdrop-blur border border-white/10 p-6 sm:p-8"
   }, /*#__PURE__*/React.createElement("div", {
     className: "space-y-3 text-[11px] sm:text-xs leading-relaxed text-white/40"
