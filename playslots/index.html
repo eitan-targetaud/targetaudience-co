@@ -122,7 +122,14 @@ const {
   useRef,
   useEffect
 } = React;
-const TRACK_URL = "https://trk.track450.com/aff_c?offer_id=2950&aff_id=2257&aff_sub=XXX&aff_sub2=XXX&aff_sub3=XXX";
+function buildTrackUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const sub1 = params.get("utm_campaign") || "XXX";
+  const sub2 = params.get("utm_term") || "XXX";
+  const sub3 = params.get("utm_content") || "XXX";
+  return "https://trk.track450.com/aff_c?offer_id=2950&aff_id=2257&aff_sub=" + encodeURIComponent(sub1) + "&aff_sub2=" + encodeURIComponent(sub2) + "&aff_sub3=" + encodeURIComponent(sub3);
+}
+const TRACK_URL = buildTrackUrl();
 
 /* ---------------- Icons (inline SVG) ---------------- */
 const Icon = ({
