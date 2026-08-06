@@ -8,7 +8,7 @@
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script>
   tailwind.config = {
     theme: {
@@ -16,6 +16,7 @@
         fontFamily: {
           display: ['"Baloo 2"', 'sans-serif'],
           body: ['Inter', 'sans-serif'],
+          heading: ['"Luckiest Guy"', 'cursive'],
         },
         colors: {
           ink: '#07020f',
@@ -41,6 +42,7 @@
     background: #07020f;
   }
   .font-display { font-family: 'Baloo 2', sans-serif; }
+  .font-heading { font-family: 'Luckiest Guy', cursive; }
 
   ::-webkit-scrollbar { height: 8px; width: 8px; }
   ::-webkit-scrollbar-thumb { background: #ffd70066; border-radius: 8px; }
@@ -71,6 +73,18 @@
     background-clip: text;
     color: transparent;
     animation: shimmerGold 4.5s linear infinite;
+  }
+
+  .text-stroke {
+    -webkit-text-stroke: 1.5px rgba(7,2,15,0.9);
+    paint-order: stroke fill;
+  }
+  .text-embossed-gold {
+    background: linear-gradient(180deg, #fff8d6 0%, #ffd700 45%, #c98a1a 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 3px 0 rgba(0,0,0,0.35), 0 6px 14px rgba(0,0,0,0.45);
   }
 
   @keyframes ctaPulse {
@@ -399,10 +413,14 @@ function Hero() {
   }, /*#__PURE__*/React.createElement("div", {
     className: "text-center lg:text-left"
   }, /*#__PURE__*/React.createElement("h1", {
-    className: "font-display font-800 text-4xl sm:text-5xl lg:text-[3.4rem] leading-[1.05] text-white"
-  }, "Best ", /*#__PURE__*/React.createElement("span", {
+    className: "font-heading text-stroke text-4xl sm:text-5xl lg:text-[3.6rem] leading-[1.15] tracking-wide"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "text-embossed-gold"
+  }, "Best"), " ", /*#__PURE__*/React.createElement("span", {
     className: "text-shimmer"
-  }, "Social Casino"), " in the USA"), /*#__PURE__*/React.createElement("p", {
+  }, "Social Casino"), " ", /*#__PURE__*/React.createElement("span", {
+    className: "text-embossed-gold"
+  }, "in the USA")), /*#__PURE__*/React.createElement("p", {
     className: "mt-5 font-display font-700 text-lg sm:text-2xl text-neon drop-shadow-[0_0_12px_rgba(58,228,14,0.65)] uppercase tracking-wide"
   }, "Spin to win instant prizes & jackpots!"), /*#__PURE__*/React.createElement("p", {
     className: "mt-4 text-white/55 max-w-md mx-auto lg:mx-0 text-sm sm:text-base leading-relaxed"
