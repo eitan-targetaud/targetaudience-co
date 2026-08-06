@@ -8,7 +8,7 @@
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Luckiest+Guy&family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script>
   tailwind.config = {
     theme: {
@@ -17,6 +17,7 @@
           display: ['"Baloo 2"', 'sans-serif'],
           body: ['Inter', 'sans-serif'],
           heading: ['"Luckiest Guy"', 'cursive'],
+          impact: ['"Archivo Black"', 'sans-serif'],
         },
         colors: {
           ink: '#07020f',
@@ -43,6 +44,7 @@
   }
   .font-display { font-family: 'Baloo 2', sans-serif; }
   .font-heading { font-family: 'Luckiest Guy', cursive; }
+  .font-impact { font-family: 'Archivo Black', sans-serif; }
 
   ::-webkit-scrollbar { height: 8px; width: 8px; }
   ::-webkit-scrollbar-thumb { background: #ffd70066; border-radius: 8px; }
@@ -413,13 +415,13 @@ function Hero() {
   }, /*#__PURE__*/React.createElement("div", {
     className: "text-center"
   }, /*#__PURE__*/React.createElement("h1", {
-    className: "font-heading text-stroke text-4xl sm:text-5xl lg:text-[3.6rem] leading-[1.15] tracking-wide"
+    className: "font-impact text-4xl sm:text-5xl lg:text-[3.6rem] leading-[1.05] tracking-tight drop-shadow-[0_4px_10px_rgba(0,0,0,0.55)]"
   }, /*#__PURE__*/React.createElement("span", {
-    className: "text-embossed-gold"
+    className: "text-white"
   }, "100%"), " ", /*#__PURE__*/React.createElement("span", {
-    className: "text-shimmer"
+    className: "text-gold"
   }, "MORE COINS"), " ", /*#__PURE__*/React.createElement("span", {
-    className: "text-neon drop-shadow-[0_0_12px_rgba(58,228,14,0.65)]"
+    className: "text-neon"
   }, "+75 FREE SPINS")), /*#__PURE__*/React.createElement("p", {
     className: "mt-5 font-display font-700 text-lg sm:text-2xl text-neon drop-shadow-[0_0_12px_rgba(58,228,14,0.65)] uppercase tracking-wide"
   }, "Spin to win instant prizes & jackpots!"), /*#__PURE__*/React.createElement("p", {
