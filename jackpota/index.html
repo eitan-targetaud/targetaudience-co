@@ -390,54 +390,6 @@ function FloatingDecor() {
   }, /*#__PURE__*/React.createElement(it.El, null))));
 }
 
-/* ---------------- Header ---------------- */
-function Header() {
-  const navItems = [{
-    icon: "🔔",
-    label: "All Games"
-  }, {
-    icon: "🏠",
-    label: "About Us"
-  }, {
-    icon: "🎁",
-    label: "Promos"
-  }, {
-    icon: "🛟",
-    label: "Help"
-  }];
-  return /*#__PURE__*/React.createElement("header", {
-    className: "sticky top-0 z-30 bg-[#07020f]/90 backdrop-blur border-b border-white/10"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "max-w-7xl mx-auto flex items-center justify-between px-5 sm:px-8 lg:px-10 py-4"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center gap-2"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "w-8 h-8 rounded-full bg-gradient-to-br from-gold to-yellow-600 flex items-center justify-center shadow-goldglow"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "text-ink font-display font-800 text-base"
-  }, "J")), /*#__PURE__*/React.createElement("span", {
-    className: "font-display italic font-800 text-xl sm:text-2xl tracking-wide text-shimmer"
-  }, "Jackpota")), /*#__PURE__*/React.createElement("nav", {
-    className: "hidden lg:flex items-center gap-7"
-  }, navItems.map((n, i) => /*#__PURE__*/React.createElement("a", {
-    key: i,
-    href: "#",
-    className: "flex items-center gap-1.5 text-sm text-white/70 hover:text-gold transition-colors"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "text-base"
-  }, n.icon), /*#__PURE__*/React.createElement("span", {
-    className: "underline decoration-white/20 underline-offset-4"
-  }, n.label)))), /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center gap-3"
-  }, /*#__PURE__*/React.createElement("a", {
-    href: "#",
-    className: "hidden sm:inline-flex items-center px-5 py-2 rounded-full border border-gold/50 text-gold font-display font-700 text-sm hover:bg-gold/10 transition-colors"
-  }, "Login"), /*#__PURE__*/React.createElement("a", {
-    href: "#join",
-    className: "inline-flex items-center px-5 sm:px-6 py-2 sm:py-2.5 rounded-full bg-gradient-to-b from-neon to-neondark text-white font-display font-700 uppercase tracking-wide text-xs sm:text-sm shadow-neonglow hover:scale-105 hover:brightness-110 transition-all duration-200"
-  }, "Join Now"))));
-}
-
 /* ---------------- Hero ---------------- */
 function Hero() {
   return /*#__PURE__*/React.createElement("section", {
@@ -719,7 +671,7 @@ function App() {
     className: "pointer-events-none fixed bottom-[0%] left-[-10%] w-[500px] h-[500px] rounded-full bg-gold/8 blur-[120px] z-0"
   }), /*#__PURE__*/React.createElement(FloatingDecor, null), /*#__PURE__*/React.createElement("div", {
     className: "relative z-10"
-  }, /*#__PURE__*/React.createElement(Header, null), /*#__PURE__*/React.createElement(Hero, null), /*#__PURE__*/React.createElement(Features, null), /*#__PURE__*/React.createElement(SlotCarousel, null), /*#__PURE__*/React.createElement(Testimonials, null), /*#__PURE__*/React.createElement(Footer, null)));
+  }, /*#__PURE__*/React.createElement(Hero, null), /*#__PURE__*/React.createElement(Features, null), /*#__PURE__*/React.createElement(SlotCarousel, null), /*#__PURE__*/React.createElement(Testimonials, null), /*#__PURE__*/React.createElement(Footer, null)));
 }
 ReactDOM.createRoot(document.getElementById("root")).render(/*#__PURE__*/React.createElement(App, null));</script>
 </body>
