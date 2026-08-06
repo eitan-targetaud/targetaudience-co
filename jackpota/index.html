@@ -455,16 +455,16 @@ function Hero() {
 /* ---------------- Feature cards ---------------- */
 function Features() {
   const items = [{
-    Icon: DiceIcon,
+    img: "/jackpota/assets/feature-dice.webp",
     title: "Over 1,500 Games"
   }, {
-    Icon: GiftIcon,
+    img: "/jackpota/assets/feature-gift.webp",
     title: "Daily Bonus"
   }, {
-    Icon: SevenIcon,
+    img: "/jackpota/assets/feature-sevens.webp",
     title: "Popular Slots"
   }, {
-    Icon: HeadsetIcon,
+    img: "/jackpota/assets/feature-headset.webp",
     title: "24/7 Customer Support"
   }];
   return /*#__PURE__*/React.createElement("section", {
@@ -474,15 +474,17 @@ function Features() {
   }, /*#__PURE__*/React.createElement("div", {
     className: "grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"
   }, items.map(({
-    Icon,
+    img,
     title
   }, i) => /*#__PURE__*/React.createElement("div", {
     key: i,
     className: "group relative rounded-xl bg-panel/60 border border-gold/30 p-4 sm:p-5 flex flex-col items-center text-center gap-2.5 hover:border-gold/80 hover:bg-panel transition-all duration-300 hover:-translate-y-1"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black/40 border border-gold/40 flex items-center justify-center text-gold group-hover:text-neon group-hover:border-neon/60 transition-colors duration-300"
-  }, /*#__PURE__*/React.createElement(Icon, {
-    className: "w-5 h-5 sm:w-6 sm:h-6"
+    className: "w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-black/40 border border-gold/40 flex items-center justify-center overflow-hidden group-hover:border-neon/60 transition-colors duration-300 shadow-goldglow"
+  }, /*#__PURE__*/React.createElement("img", {
+    src: img,
+    alt: title,
+    className: "w-11 h-11 sm:w-12 sm:h-12 object-contain drop-shadow-lg group-hover:scale-110 transition-transform duration-300"
   })), /*#__PURE__*/React.createElement("p", {
     className: "font-display font-700 uppercase text-[11px] sm:text-xs tracking-wide text-white"
   }, title)))), /*#__PURE__*/React.createElement("div", {
