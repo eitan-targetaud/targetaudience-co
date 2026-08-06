@@ -130,6 +130,11 @@ function buildTrackUrl() {
   return "https://trk.track450.com/aff_c?offer_id=2950&aff_id=2257&aff_sub=" + encodeURIComponent(sub1) + "&aff_sub2=" + encodeURIComponent(sub2) + "&aff_sub3=" + encodeURIComponent(sub3);
 }
 const TRACK_URL = buildTrackUrl();
+function fireClickOut() {
+  if (typeof window !== "undefined" && typeof window.fbq === "function") {
+    window.fbq("trackCustom", "ClickOut");
+  }
+}
 
 /* ---------------- Icons (inline SVG) ---------------- */
 const Icon = ({
@@ -456,6 +461,7 @@ function Hero() {
   }, /*#__PURE__*/React.createElement("a", {
     id: "join",
     href: TRACK_URL,
+    onClick: fireClickOut,
     target: "_blank",
     rel: "noopener noreferrer",
     className: "cta-pulse w-full sm:w-auto sm:min-w-[22rem] inline-flex items-center justify-center px-10 py-4 rounded-full bg-gradient-to-b from-neon to-neondark text-white font-display font-800 uppercase tracking-wide text-xl sm:text-2xl shadow-neonglow hover:scale-105 hover:brightness-110 transition-all duration-200"
@@ -586,6 +592,7 @@ function SlotCarousel() {
   }, games.map((g, i) => /*#__PURE__*/React.createElement("a", {
     key: i,
     href: TRACK_URL,
+    onClick: fireClickOut,
     target: "_blank",
     rel: "noopener noreferrer",
     className: "group relative flex-shrink-0 w-[150px] sm:w-[190px] lg:w-[210px] aspect-[3/4] rounded-2xl overflow-hidden border border-gold/30 cursor-pointer transition-transform duration-300 hover:scale-105 hover:border-gold shadow-lg block"
@@ -660,6 +667,7 @@ function Testimonials() {
     className: `w-2.5 h-2.5 rounded-full transition-colors ${i === idx ? "bg-gold" : "bg-white/20"}`
   }))), /*#__PURE__*/React.createElement("a", {
     href: TRACK_URL,
+    onClick: fireClickOut,
     target: "_blank",
     rel: "noopener noreferrer",
     className: "cta-pulse mt-9 inline-flex items-center justify-center px-10 py-4 rounded-full bg-gradient-to-b from-neon to-neondark text-white font-display font-800 uppercase tracking-wide text-xl sm:text-2xl shadow-neonglow hover:scale-105 hover:brightness-110 transition-all duration-200"
