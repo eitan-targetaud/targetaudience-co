@@ -470,14 +470,36 @@
     color:var(--ink);
   }
   .intro-point .ic{
-    width:26px;height:26px;
+    width:28px;height:28px;
     border-radius:50%;
     background: var(--rose-soft);
     display:flex;
     align-items:center;
     justify-content:center;
     flex-shrink:0;
-    font-size:13px;
+  }
+  .intro-point .ic img{
+    width:15px;height:15px;
+    display:block;
+  }
+  .opt-icon{
+    width:36px;height:36px;
+    border-radius:12px;
+    background: var(--rose-soft);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+  }
+  .opt-icon img{
+    width:20px;height:20px;
+    display:block;
+  }
+  .opt.selected .opt-icon{
+    background: var(--rose-deep);
+  }
+  .opt.selected .opt-icon img{
+    filter: brightness(0) invert(1);
   }
 
   /* thank you */
@@ -543,9 +565,9 @@ src="https://www.facebook.com/tr?id=1908154796822425&ev=PageView&noscript=1"
         <h1 class="intro-title">מצאי את הטיפול האסתטי המתאים לך</h1>
         <p class="intro-sub">שאלון קצר של דקה אחת. בסופו נחבר אותך להצעת מחיר מותאמת אישית מקליניקות מובילות באזור מגוריך.</p>
         <div class="intro-points">
-          <div class="intro-point"><span class="ic">✓</span> 4 שאלות בלבד, פחות מדקה</div>
-          <div class="intro-point"><span class="ic">✓</span> התאמה לפי אזור מגורים</div>
-          <div class="intro-point"><span class="ic">✓</span> ללא התחייבות</div>
+          <div class="intro-point"><span class="ic"><img src="/medical_aesthetics/assets/icons/icon-speed.svg" alt=""></span> 4 שאלות בלבד, פחות מדקה</div>
+          <div class="intro-point"><span class="ic"><img src="/medical_aesthetics/assets/icons/icon-location.svg" alt=""></span> התאמה לפי אזור מגורים</div>
+          <div class="intro-point"><span class="ic"><img src="/medical_aesthetics/assets/icons/icon-nocommit.svg" alt=""></span> ללא התחייבות</div>
         </div>
         <div class="nav-row">
           <button class="btn btn-primary btn-cta" onclick="goNext()">בואי נתחיל</button>
@@ -634,11 +656,11 @@ const GAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbw2vkrZnXo4X536gkn
 
 /* ====== Question data ====== */
 const Q1_OPTIONS = [
-  { label:"הזרקות ומילויים", sub:"בוטוקס, חומצה היאלורונית ועוד", value:"הזרקות ומילויים (בוטוקס, חומצה היאלורונית ועוד)" },
-  { label:"חידוש והצערת עור", sub:"אנטי אייג'ינג, שיפור מרקם ואיכות העור", value:"חידוש והצערת עור (אנטי אייג'ינג, שיפור מרקם ואיכות העור)" },
-  { label:"עיצוב וחיטוב גוף", sub:"ללא ניתוח", value:"עיצוב וחיטוב גוף ללא ניתוח" },
-  { label:"פיסול ועיצוב פנים", sub:"", value:"פיסול ועיצוב פנים" },
-  { label:"לא בטוח/ה", sub:"רוצה המלצה מקצועית", value:"לא בטוח/ה - רוצה המלצה מקצועית" }
+  { label:"הזרקות ומילויים", sub:"בוטוקס, חומצה היאלורונית ועוד", value:"הזרקות ומילויים (בוטוקס, חומצה היאלורונית ועוד)", icon:"/medical_aesthetics/assets/icons/icon-injectables.svg" },
+  { label:"חידוש והצערת עור", sub:"אנטי אייג'ינג, שיפור מרקם ואיכות העור", value:"חידוש והצערת עור (אנטי אייג'ינג, שיפור מרקם ואיכות העור)", icon:"/medical_aesthetics/assets/icons/icon-skin.svg" },
+  { label:"עיצוב וחיטוב גוף", sub:"ללא ניתוח", value:"עיצוב וחיטוב גוף ללא ניתוח", icon:"/medical_aesthetics/assets/icons/icon-body.svg" },
+  { label:"פיסול ועיצוב פנים", sub:"", value:"פיסול ועיצוב פנים", icon:"/medical_aesthetics/assets/icons/icon-face.svg" },
+  { label:"לא בטוח/ה", sub:"רוצה המלצה מקצועית", value:"לא בטוח/ה - רוצה המלצה מקצועית", icon:"/medical_aesthetics/assets/icons/icon-unsure.svg" }
 ];
 const Q2_OPTIONS = [
   { label:"כן", sub:"ואני מחפש/ת להמשיך או לחזור", value:"כן, ואני מחפש/ת להמשיך או לחזור" },
@@ -672,12 +694,14 @@ function buildOptions(containerId, list, multi, answerKey){
     const label = typeof item === "string" ? item : item.label;
     const sub = typeof item === "string" ? "" : (item.sub || "");
     const value = typeof item === "string" ? item : (item.value || item.label);
+    const icon = typeof item === "string" ? "" : (item.icon || "");
     const opt = document.createElement("div");
-    opt.className = "opt " + (multi ? "multi" : "single");
+    opt.className = "opt " + (multi ? "multi" : "single") + (icon ? " has-icon" : "");
     const textHtml = sub
       ? `<b>${label}</b> <span class="opt-sub">${sub}</span>`
       : `${label}`;
-    opt.innerHTML = `<span class="opt-mark">${checkSvg}</span><span class="opt-text">${textHtml}</span>`;
+    const iconHtml = icon ? `<span class="opt-icon"><img src="${icon}" alt=""></span>` : "";
+    opt.innerHTML = `${iconHtml}<span class="opt-mark">${checkSvg}</span><span class="opt-text">${textHtml}</span>`;
     opt.addEventListener("click", () => {
       if(multi){
         const idx = answers[answerKey].indexOf(value);
