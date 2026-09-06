@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Play Best Social Casino!</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Luckiest+Guy&family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          display: ['"Baloo 2"', 'sans-serif'],
+          body: ['Inter', 'sans-serif'],
+          heading: ['"Luckiest Guy"', 'cursive'],
+          impact: ['"Archivo Black"', 'sans-serif'],
+        },
+        colors: {
+          ink: '#07020f',
+          plum: '#1c0a38',
+          panel: '#150a28',
+          gold: '#ffd700',
+          neon: '#3ae40e',
+          neondark: '#209904',
+        },
+        boxShadow: {
+          goldglow: '0 0 18px rgba(255,215,0,0.35)',
+          neonglow: '0 0 22px rgba(58,228,14,0.55)',
+        },
+      },
+    },
+  };
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: #07020f;
+  }
+  .font-display { font-family: 'Baloo 2', sans-serif; }
+  .font-heading { font-family: 'Luckiest Guy', cursive; }
+  .font-impact { font-family: 'Archivo Black', sans-serif; }
+
+  ::-webkit-scrollbar { height: 8px; width: 8px; }
+  ::-webkit-scrollbar-thumb { background: #ffd70066; border-radius: 8px; }
+
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  @keyframes floatY {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-18px); }
+  }
+  .animate-floaty { animation: floatY 6s ease-in-out infinite; }
+
+  @keyframes pulseGlow {
+    0%, 100% { opacity: 0.55; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.06); }
+  }
+  .animate-pulse-glow { animation: pulseGlow 3.2s ease-in-out infinite; }
+
+  @keyframes shimmerGold {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+  .text-shimmer {
+    background: linear-gradient(90deg, #ffd700, #fff6c9, #ffd700, #b8860b, #ffd700);
+    background-size: 250% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmerGold 4.5s linear infinite;
+  }
+
+  .text-stroke {
+    -webkit-text-stroke: 1.5px rgba(7,2,15,0.9);
+    paint-order: stroke fill;
+  }
+  .text-embossed-gold {
+    background: linear-gradient(180deg, #fff8d6 0%, #ffd700 45%, #c98a1a 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 3px 0 rgba(0,0,0,0.35), 0 6px 14px rgba(0,0,0,0.45);
+  }
+
+  @keyframes ctaPulse {
+    0%, 100% { box-shadow: 0 0 18px rgba(58,228,14,0.55), 0 0 0 0 rgba(58,228,14,0.4); }
+    50% { box-shadow: 0 0 30px rgba(58,228,14,0.85), 0 0 0 8px rgba(58,228,14,0); }
+  }
+  .cta-pulse { animation: ctaPulse 2.4s ease-in-out infinite; }
+</style>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1079886731034250');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1079886731034250&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+</head>
+<body class="bg-ink">
+<div id="root"></div>
+
+<script>
+const {
+  useState,
+  useRef,
+  useEffect
+} = React;
+function buildTrackUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const sub1 = params.get("utm_campaign") || "XXX";
+  const sub2 = params.get("utm_term") || "XXX";
+  const sub3 = params.get("utm_content") || "XXX";
+  return "https://trk.track450.com/aff_c?offer_id=2950&aff_id=2257&aff_sub=" + encodeURIComponent(sub1) + "&aff_sub2=" + encodeURIComponent(sub2) + "&aff_sub3=" + encodeURIComponent(sub3);
+}
+const TRACK_URL = buildTrackUrl();
+function fireClickOut() {
+  if (typeof window !== "undefined" && typeof window.fbq === "function") {
+    window.fbq("trackCustom", "ClickOut");
+  }
+}
+
+/* ---------------- Icons (inline SVG) ---------------- */
+const Icon = ({
+  children,
+  className = "w-7 h-7"
+}) => /*#__PURE__*/React.createElement("svg", {
+  viewBox: "0 0 24 24",
+  fill: "none",
+  className: className,
+  xmlns: "http://www.w3.org/2000/svg"
+}, children);
+const DiceIcon = p => /*#__PURE__*/React.createElement(Icon, p, /*#__PURE__*/React.createElement("rect", {
+  x: "3",
+  y: "3",
+  width: "8",
+  height: "8",
+  rx: "2",
+  stroke: "currentColor",
+  strokeWidth: "1.6"
+}), /*#__PURE__*/React.createElement("rect", {
+  x: "13",
+  y: "13",
+  width: "8",
+  height: "8",
+  rx: "2",
+  stroke: "currentColor",
+  strokeWidth: "1.6"
+}), /*#__PURE__*/React.createElement("circle", {
+  cx: "6",
+  cy: "6",
+  r: "1",
+  fill: "currentColor"
+}), /*#__PURE__*/React.createElement("circle", {
+  cx: "8",
+  cy: "8",
+  r: "1",
+  fill: "currentColor"
+}), /*#__PURE__*/React.createElement("circle", {
+  cx: "16",
+  cy: "16",
+  r: "1",
+  fill: "currentColor"
+}), /*#__PURE__*/React.createElement("circle", {
+  cx: "18",
+  cy: "18",
+  r: "1",
+  fill: "currentColor"
+}), /*#__PURE__*/React.createElement("circle", {
+  cx: "16",
+  cy: "18",
+  r: "1",
+  fill: "currentColor"
+}), /*#__PURE__*/React.createElement("circle", {
+  cx: "18",
+  cy: "16",
+  r: "1",
+  fill: "currentColor"
+}));
+const GiftIcon = p => /*#__PURE__*/React.createElement(Icon, p, /*#__PURE__*/React.createElement("rect", {
+  x: "3",
+  y: "9",
+  width: "18",
+  height: "4",
+  rx: "1",
+  stroke: "currentColor",
+  strokeWidth: "1.6"
+}), /*#__PURE__*/React.createElement("rect", {
+  x: "5",
+  y: "13",
+  width: "14",
+  height: "8",
+  rx: "1",
+  stroke: "currentColor",
+  strokeWidth: "1.6"
+}), /*#__PURE__*/React.createElement("path", {
+  d: "M12 9V21",
+  stroke: "currentColor",
+  strokeWidth: "1.6"
+}), /*#__PURE__*/React.createElement("path", {
+  d: "M12 9c0-2.5-1.5-5-4-5S6 6.5 8 9",
+  stroke: "currentColor",
+  strokeWidth: "1.6",
+  strokeLinecap: "round"
+}), /*#__PURE__*/React.createElement("path", {
+  d: "M12 9c0-2.5 1.5-5 4-5s2 3.5 0 5",
+  stroke: "currentColor",
+  strokeWidth: "1.6",
+  strokeLinecap: "round"
+}));
+const SevenIcon = p => /*#__PURE__*/React.createElement(Icon, p, /*#__PURE__*/React.createElement("rect", {
+  x: "2",
+  y: "4",
+  width: "6",
+  height: "16",
+  rx: "1.5",
+  stroke: "currentColor",
+  strokeWidth: "1.6"
+}), /*#__PURE__*/React.createElement("rect", {
+  x: "9",
+  y: "4",
+  width: "6",
+  height: "16",
+  rx: "1.5",
+  stroke: "currentColor",
+  strokeWidth: "1.6"
+}), /*#__PURE__*/React.createElement("rect", {
+  x: "16",
+  y: "4",
+  width: "6",
+  height: "16",
+  rx: "1.5",
+  stroke: "currentColor",
+  strokeWidth: "1.6"
+}), /*#__PURE__*/React.createElement("path", {
+  d: "M4 8h2M11 8h2M18 8h2",
+  stroke: "currentColor",
+  strokeWidth: "1.4",
+  strokeLinecap: "round"
+}));
+const HeadsetIcon = p => /*#__PURE__*/React.createElement(Icon, p, /*#__PURE__*/React.createElement("path", {
+  d: "M4 13v-1a8 8 0 0116 0v1",
+  stroke: "currentColor",
+  strokeWidth: "1.6",
+  strokeLinecap: "round"
+}), /*#__PURE__*/React.createElement("rect", {
+  x: "2.5",
+  y: "13",
+  width: "4.5",
+  height: "6",
+  rx: "1.5",
+  stroke: "currentColor",
+  strokeWidth: "1.6"
+}), /*#__PURE__*/React.createElement("rect", {
+  x: "17",
+  y: "13",
+  width: "4.5",
+  height: "6",
+  rx: "1.5",
+  stroke: "currentColor",
+  strokeWidth: "1.6"
+}), /*#__PURE__*/React.createElement("path", {
+  d: "M19.5 19v1a3 3 0 01-3 3h-3",
+  stroke: "currentColor",
+  strokeWidth: "1.6",
+  strokeLinecap: "round"
+}));
+const StarIcon = ({
+  className = "w-6 h-6",
+  filled = true
+}) => /*#__PURE__*/React.createElement("svg", {
+  viewBox: "0 0 24 24",
+  className: className,
+  xmlns: "http://www.w3.org/2000/svg"
+}, /*#__PURE__*/React.createElement("path", {
+  d: "M12 2.5l2.9 6.6 7.1.7-5.4 4.7 1.7 7-6.3-3.8L5.7 21.5l1.7-7-5.4-4.7 7.1-.7L12 2.5z",
+  fill: filled ? "#ffd700" : "none",
+  stroke: "#ffd700",
+  strokeWidth: "1"
+}));
+const ChevronLeft = p => /*#__PURE__*/React.createElement(Icon, p, /*#__PURE__*/React.createElement("path", {
+  d: "M15 5l-7 7 7 7",
+  stroke: "currentColor",
+  strokeWidth: "2.2",
+  strokeLinecap: "round",
+  strokeLinejoin: "round"
+}));
+const ChevronRight = p => /*#__PURE__*/React.createElement(Icon, p, /*#__PURE__*/React.createElement("path", {
+  d: "M9 5l7 7-7 7",
+  stroke: "currentColor",
+  strokeWidth: "2.2",
+  strokeLinecap: "round",
+  strokeLinejoin: "round"
+}));
+
+/* social icons */
+const FacebookIcon = p => /*#__PURE__*/React.createElement(Icon, p, /*#__PURE__*/React.createElement("path", {
+  d: "M14 9h2V6h-2c-1.7 0-3 1.3-3 3v2H9v3h2v6h3v-6h2.2l.8-3H14V9z",
+  fill: "currentColor",
+  stroke: "none"
+}));
+const InstagramIcon = p => /*#__PURE__*/React.createElement(Icon, p, /*#__PURE__*/React.createElement("rect", {
+  x: "3.5",
+  y: "3.5",
+  width: "17",
+  height: "17",
+  rx: "4.5",
+  stroke: "currentColor",
+  strokeWidth: "1.6"
+}), /*#__PURE__*/React.createElement("circle", {
+  cx: "12",
+  cy: "12",
+  r: "4",
+  stroke: "currentColor",
+  strokeWidth: "1.6"
+}), /*#__PURE__*/React.createElement("circle", {
+  cx: "17",
+  cy: "7",
+  r: "1",
+  fill: "currentColor"
+}));
+const XIcon = p => /*#__PURE__*/React.createElement(Icon, p, /*#__PURE__*/React.createElement("path", {
+  d: "M4 4l16 16M20 4L4 20",
+  stroke: "currentColor",
+  strokeWidth: "1.8",
+  strokeLinecap: "round"
+}));
+const DiscordIcon = p => /*#__PURE__*/React.createElement(Icon, p, /*#__PURE__*/React.createElement("path", {
+  d: "M6 8.5C8 7 10 6.5 12 6.5s4 .5 6 2c1.2 2 1.8 4.5 1.6 7.3-1.6 1.2-3.2 1.9-4.8 2.2l-.9-1.5c.8-.3 1.5-.6 2.2-1.1-.2-.1-.4-.3-.6-.4-3.5 1.6-7.4 1.6-10.9 0-.2.1-.4.3-.6.4.7.5 1.4.8 2.2 1.1L5.3 18c-1.6-.3-3.2-1-4.8-2.2C.2 13 .9 10.5 2.1 8.5 4 7 6 8.5 6 8.5z",
+  stroke: "currentColor",
+  strokeWidth: "1.2",
+  strokeLinejoin: "round"
+}), /*#__PURE__*/React.createElement("circle", {
+  cx: "9",
+  cy: "12.5",
+  r: "1",
+  fill: "currentColor"
+}), /*#__PURE__*/React.createElement("circle", {
+  cx: "15",
+  cy: "12.5",
+  r: "1",
+  fill: "currentColor"
+}));
+const YoutubeIcon = p => /*#__PURE__*/React.createElement(Icon, p, /*#__PURE__*/React.createElement("rect", {
+  x: "3",
+  y: "6",
+  width: "18",
+  height: "12",
+  rx: "3",
+  stroke: "currentColor",
+  strokeWidth: "1.6"
+}), /*#__PURE__*/React.createElement("path", {
+  d: "M10.5 9.5l5 2.5-5 2.5z",
+  fill: "currentColor",
+  stroke: "none"
+}));
+const CherryEmoji = ({
+  className
+}) => /*#__PURE__*/React.createElement("span", {
+  className: className
+}, "🍒");
+const CoinEmoji = ({
+  className
+}) => /*#__PURE__*/React.createElement("span", {
+  className: className
+}, "🪙");
+const DiceEmoji = ({
+  className
+}) => /*#__PURE__*/React.createElement("span", {
+  className: className
+}, "🎲");
+const GemEmoji = ({
+  className
+}) => /*#__PURE__*/React.createElement("span", {
+  className: className
+}, "💎");
+
+/* ---------------- Floating background decor ---------------- */
+function FloatingDecor() {
+  const items = [{
+    El: DiceEmoji,
+    top: "10%",
+    left: "3%",
+    size: "text-4xl",
+    delay: "0s",
+    dur: "7s"
+  }, {
+    El: CoinEmoji,
+    top: "72%",
+    left: "4%",
+    size: "text-3xl",
+    delay: "0.6s",
+    dur: "8s"
+  }, {
+    El: GemEmoji,
+    top: "58%",
+    left: "96%",
+    size: "text-4xl",
+    delay: "2s",
+    dur: "6.5s"
+  }, {
+    El: CherryEmoji,
+    top: "14%",
+    left: "95%",
+    size: "text-4xl",
+    delay: "1.2s",
+    dur: "6s"
+  }];
+  return /*#__PURE__*/React.createElement("div", {
+    className: "pointer-events-none absolute inset-0 overflow-hidden opacity-30 select-none z-0"
+  }, items.map((it, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    className: `absolute ${it.size} animate-floaty drop-shadow-[0_0_10px_rgba(255,215,0,0.25)]`,
+    style: {
+      top: it.top,
+      left: it.left,
+      animationDelay: it.delay,
+      animationDuration: it.dur
+    }
+  }, /*#__PURE__*/React.createElement(it.El, null))));
+}
+
+/* ---------------- Hero ---------------- */
+function Hero() {
+  return /*#__PURE__*/React.createElement("section", {
+    className: "relative z-10 px-5 sm:px-8 lg:px-10 pt-8 pb-16 lg:pt-10 lg:pb-20"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "max-w-7xl mx-auto mb-6"
+  }, /*#__PURE__*/React.createElement("img", {
+    src: "/playslots-crushc/assets/logo.webp",
+    alt: "Play Social Casino logo",
+    className: "w-16 h-16 sm:w-20 sm:h-20"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 lg:gap-14 items-center"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "text-center"
+  }, /*#__PURE__*/React.createElement("h1", {
+    className: "font-impact text-4xl sm:text-5xl lg:text-[3.6rem] leading-[1.05] tracking-tight drop-shadow-[0_4px_10px_rgba(0,0,0,0.55)]"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "text-white"
+  }, "100%"), " ", /*#__PURE__*/React.createElement("span", {
+    className: "text-gold"
+  }, "MORE COINS"), " ", /*#__PURE__*/React.createElement("span", {
+    className: "text-neon"
+  }, "+75 FREE SPINS")), /*#__PURE__*/React.createElement("p", {
+    className: "mt-5 font-display font-700 text-lg sm:text-2xl text-neon drop-shadow-[0_0_12px_rgba(58,228,14,0.65)] uppercase tracking-wide"
+  }, "Spin to win instant prizes & jackpots!"), /*#__PURE__*/React.createElement("p", {
+    className: "mt-4 text-white max-w-md mx-auto text-sm sm:text-base leading-relaxed"
+  }, "Join over a million players spinning slots, winning Gold Coins, and redeeming real prizes — no purchase necessary."), /*#__PURE__*/React.createElement("div", {
+    className: "mt-8 flex flex-col items-center gap-4"
+  }, /*#__PURE__*/React.createElement("a", {
+    id: "join",
+    href: TRACK_URL,
+    onClick: fireClickOut,
+    target: "_blank",
+    rel: "noopener noreferrer",
+    className: "cta-pulse w-full sm:w-auto sm:min-w-[22rem] inline-flex items-center justify-center px-10 py-4 rounded-full bg-gradient-to-b from-neon to-neondark text-white font-display font-800 uppercase tracking-wide text-xl sm:text-2xl shadow-neonglow hover:scale-105 hover:brightness-110 transition-all duration-200"
+  }, "Join Now"), /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center gap-1"
+  }, [...Array(5)].map((_, i) => /*#__PURE__*/React.createElement(StarIcon, {
+    key: i,
+    className: "w-5 h-5"
+  })), /*#__PURE__*/React.createElement("span", {
+    className: "ml-2 text-white/60 text-sm"
+  }, "4.8/5 from 12,400+ players")))), /*#__PURE__*/React.createElement("div", {
+    className: "relative mx-auto max-w-lg lg:max-w-none"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "absolute inset-[-8%] rounded-[2rem] bg-gold/15 blur-3xl animate-pulse-glow"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "relative rounded-[1.75rem] overflow-hidden border-2 border-gold/50 shadow-goldglow"
+  }, /*#__PURE__*/React.createElement("img", {
+    src: "/playslots-crushc/assets/hero.webp",
+    alt: "Jackpota social casino — spin to win instant prizes and jackpots",
+    className: "w-full h-full object-cover"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-transparent"
+  })))));
+}
+
+/* ---------------- Feature cards ---------------- */
+function Features() {
+  const items = [{
+    img: "/playslots-crushc/assets/feature-dice.webp",
+    title: "Over 1,500 Games"
+  }, {
+    img: "/playslots-crushc/assets/feature-gift.webp",
+    title: "Daily Bonus"
+  }, {
+    img: "/playslots-crushc/assets/feature-sevens.webp",
+    title: "Popular Slots"
+  }, {
+    img: "/playslots-crushc/assets/feature-headset.webp",
+    title: "24/7 Customer Support"
+  }];
+  return /*#__PURE__*/React.createElement("section", {
+    className: "relative z-10 px-5 sm:px-8 lg:px-10 py-4"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "max-w-7xl mx-auto"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"
+  }, items.map(({
+    img,
+    title
+  }, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    className: "group relative rounded-xl bg-panel/60 border border-gold/30 p-4 sm:p-5 flex flex-col items-center text-center gap-2.5 hover:border-gold/80 hover:bg-panel transition-all duration-300 hover:-translate-y-1"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-black/40 border border-gold/40 flex items-center justify-center overflow-hidden group-hover:border-neon/60 transition-colors duration-300 shadow-goldglow"
+  }, /*#__PURE__*/React.createElement("img", {
+    src: img,
+    alt: title,
+    className: "w-11 h-11 sm:w-12 sm:h-12 object-contain drop-shadow-lg group-hover:scale-110 transition-transform duration-300"
+  })), /*#__PURE__*/React.createElement("p", {
+    className: "font-display font-700 uppercase text-[11px] sm:text-xs tracking-wide text-white"
+  }, title)))), /*#__PURE__*/React.createElement("div", {
+    className: "mt-6 rounded-xl bg-black/40 border border-gold/20 py-4 px-5 text-center"
+  }, /*#__PURE__*/React.createElement("p", {
+    className: "font-display font-800 text-gold text-sm sm:text-base uppercase tracking-wide"
+  }, "No Purchase Required · Free Forever"), /*#__PURE__*/React.createElement("p", {
+    className: "text-white/40 text-xs sm:text-sm mt-1"
+  }, "Free-to-play social casino. Have fun without paying."))));
+}
+
+/* ---------------- Slot games carousel ---------------- */
+function SlotCarousel() {
+  const games = [{
+    name: "Golden Sevens",
+    img: "/playslots-crushc/assets/slot-golden-sevens.webp"
+  }, {
+    name: "Cherry Pop",
+    img: "/playslots-crushc/assets/slot-cherry-pop.webp"
+  }, {
+    name: "Diamond Rush",
+    img: "/playslots-crushc/assets/slot-diamond-rush.webp"
+  }, {
+    name: "Wild Bells",
+    img: "/playslots-crushc/assets/slot-wild-bells.webp"
+  }, {
+    name: "Coin Fortune",
+    img: "/playslots-crushc/assets/slot-coin-fortune.webp"
+  }, {
+    name: "Lucky Dice",
+    img: "/playslots-crushc/assets/slot-lucky-dice.webp"
+  }];
+  const scrollRef = useRef(null);
+  const scrollByCards = dir => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const amount = Math.min(el.clientWidth * 0.8, 600) * dir;
+    el.scrollBy({
+      left: amount,
+      behavior: "smooth"
+    });
+  };
+  return /*#__PURE__*/React.createElement("section", {
+    className: "relative z-10 px-5 sm:px-8 lg:px-10 py-14"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "max-w-7xl mx-auto"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center justify-between mb-6"
+  }, /*#__PURE__*/React.createElement("h2", {
+    className: "font-display font-800 text-2xl sm:text-3xl text-shimmer uppercase tracking-wide"
+  }, "Slot Games"), /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center gap-3"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "text-gold text-sm sm:text-base font-semibold border border-gold/40 rounded-full px-4 py-1.5 hover:bg-gold/10 transition-colors"
+  }, "See all"), /*#__PURE__*/React.createElement("button", {
+    onClick: () => scrollByCards(-1),
+    "aria-label": "Previous games",
+    className: "w-9 h-9 rounded-full bg-panel border border-gold/40 flex items-center justify-center text-gold hover:bg-gold hover:text-ink transition-colors"
+  }, /*#__PURE__*/React.createElement(ChevronLeft, {
+    className: "w-5 h-5"
+  })), /*#__PURE__*/React.createElement("button", {
+    onClick: () => scrollByCards(1),
+    "aria-label": "Next games",
+    className: "w-9 h-9 rounded-full bg-panel border border-gold/40 flex items-center justify-center text-gold hover:bg-gold hover:text-ink transition-colors"
+  }, /*#__PURE__*/React.createElement(ChevronRight, {
+    className: "w-5 h-5"
+  })))), /*#__PURE__*/React.createElement("div", {
+    ref: scrollRef,
+    className: "flex gap-4 sm:gap-5 overflow-x-auto no-scrollbar scroll-smooth pb-2"
+  }, games.map((g, i) => /*#__PURE__*/React.createElement("a", {
+    key: i,
+    href: TRACK_URL,
+    onClick: fireClickOut,
+    target: "_blank",
+    rel: "noopener noreferrer",
+    className: "group relative flex-shrink-0 w-[150px] sm:w-[190px] lg:w-[210px] aspect-[3/4] rounded-2xl overflow-hidden border border-gold/30 cursor-pointer transition-transform duration-300 hover:scale-105 hover:border-gold shadow-lg block"
+  }, /*#__PURE__*/React.createElement("img", {
+    src: g.img,
+    alt: g.name,
+    className: "absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "absolute bottom-0 inset-x-0 p-3"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "font-display font-700 text-white text-sm sm:text-base drop-shadow block"
+  }, g.name)), /*#__PURE__*/React.createElement("div", {
+    className: "absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "text-xs font-display font-800 text-neon uppercase tracking-wide border border-neon/60 rounded-full px-4 py-1.5"
+  }, "Play Now")))))));
+}
+
+/* ---------------- Testimonials ---------------- */
+function Testimonials() {
+  const testimonials = [{
+    quote: "Thanks Jame. All of your winnings and the coins are incredible! My life has definitely changed and I cannot thank you enough!",
+    author: "Jame"
+  }, {
+    quote: "I spin every single day on my lunch break — the daily bonus alone makes it worth logging in. Redeeming prizes was so easy!",
+    author: "Marcus T."
+  }, {
+    quote: "Best social casino app I've tried. Over 1,500 games and the support team actually responds fast. Highly recommend!",
+    author: "Priya K."
+  }];
+  const [idx, setIdx] = useState(0);
+  const len = testimonials.length;
+  const next = () => setIdx(i => (i + 1) % len);
+  const prev = () => setIdx(i => (i - 1 + len) % len);
+  return /*#__PURE__*/React.createElement("section", {
+    className: "relative z-10 px-5 sm:px-8 lg:px-10 py-16"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "max-w-3xl mx-auto text-center rounded-2xl border border-gold/20 bg-panel/40 px-6 py-10 sm:px-12 sm:py-12"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center justify-center gap-1 mb-6"
+  }, [...Array(5)].map((_, i) => /*#__PURE__*/React.createElement(StarIcon, {
+    key: i,
+    className: "w-7 h-7 sm:w-8 sm:h-8"
+  }))), /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center justify-center gap-4 sm:gap-8"
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: prev,
+    "aria-label": "Previous testimonial",
+    className: "flex-shrink-0 w-10 h-10 rounded-full bg-black/40 border border-gold/40 flex items-center justify-center text-gold hover:bg-gold hover:text-ink transition-colors"
+  }, /*#__PURE__*/React.createElement(ChevronLeft, {
+    className: "w-5 h-5"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "min-h-[140px] flex flex-col items-center justify-center"
+  }, /*#__PURE__*/React.createElement("p", {
+    className: "font-display text-lg sm:text-2xl text-white leading-relaxed italic"
+  }, "\"", testimonials[idx].quote, "\""), /*#__PURE__*/React.createElement("p", {
+    className: "mt-5 text-gold font-display font-700 uppercase tracking-wide text-sm sm:text-base"
+  }, "— ", testimonials[idx].author)), /*#__PURE__*/React.createElement("button", {
+    onClick: next,
+    "aria-label": "Next testimonial",
+    className: "flex-shrink-0 w-10 h-10 rounded-full bg-black/40 border border-gold/40 flex items-center justify-center text-gold hover:bg-gold hover:text-ink transition-colors"
+  }, /*#__PURE__*/React.createElement(ChevronRight, {
+    className: "w-5 h-5"
+  }))), /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center justify-center gap-2 mt-6"
+  }, testimonials.map((_, i) => /*#__PURE__*/React.createElement("button", {
+    key: i,
+    onClick: () => setIdx(i),
+    "aria-label": `Go to testimonial ${i + 1}`,
+    className: `w-2.5 h-2.5 rounded-full transition-colors ${i === idx ? "bg-gold" : "bg-white/20"}`
+  }))), /*#__PURE__*/React.createElement("a", {
+    href: TRACK_URL,
+    onClick: fireClickOut,
+    target: "_blank",
+    rel: "noopener noreferrer",
+    className: "cta-pulse mt-9 inline-flex items-center justify-center px-10 py-4 rounded-full bg-gradient-to-b from-neon to-neondark text-white font-display font-800 uppercase tracking-wide text-xl sm:text-2xl shadow-neonglow hover:scale-105 hover:brightness-110 transition-all duration-200"
+  }, "Join Now")));
+}
+
+/* ---------------- Footer ---------------- */
+function Footer() {
+  return /*#__PURE__*/React.createElement("footer", {
+    className: "relative z-10 px-5 sm:px-8 lg:px-10 py-12 border-t border-white/10"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "max-w-7xl mx-auto"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "rounded-2xl bg-black/40 backdrop-blur border border-white/10 p-6 sm:p-8"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "space-y-3 text-[11px] sm:text-xs leading-relaxed text-white/40"
+  }, /*#__PURE__*/React.createElement("p", null, "© ", new Date().getFullYear(), ". All rights reserved. All trademarks are property of their respective owners.")))));
+}
+
+/* ---------------- App ---------------- */
+function App() {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "relative min-h-screen overflow-hidden bg-ink text-white font-body"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "pointer-events-none fixed top-[-15%] left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full bg-purple-800/15 blur-[140px] z-0"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "pointer-events-none fixed top-[40%] right-[-10%] w-[500px] h-[500px] rounded-full bg-neon/5 blur-[120px] z-0"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "pointer-events-none fixed bottom-[0%] left-[-10%] w-[500px] h-[500px] rounded-full bg-gold/8 blur-[120px] z-0"
+  }), /*#__PURE__*/React.createElement(FloatingDecor, null), /*#__PURE__*/React.createElement("div", {
+    className: "relative z-10"
+  }, /*#__PURE__*/React.createElement(Hero, null), /*#__PURE__*/React.createElement(Features, null), /*#__PURE__*/React.createElement(SlotCarousel, null), /*#__PURE__*/React.createElement(Testimonials, null), /*#__PURE__*/React.createElement(Footer, null)));
+}
+ReactDOM.createRoot(document.getElementById("root")).render(/*#__PURE__*/React.createElement(App, null));</script>
+</body>
+</html>
